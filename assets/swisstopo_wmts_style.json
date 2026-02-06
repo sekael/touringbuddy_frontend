@@ -7,7 +7,7 @@
         "https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg"
       ],
       "tileSize": 256,
-      "attribution": "© Swisstopo",
+      "attribution": "© swisstopo",
       "maxzoom": 25
     }
   },
