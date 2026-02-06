@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
+import 'package:touringbuddy_frontend/core/logging/app_logger.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -15,6 +15,7 @@ class _MapPageState extends State<MapPage> {
   MapLibreMapController? _controller;
   int _currentIndex = 0;
   bool _isSwitching = false;
+  final bool _isPickingMode = true;
 
   // Middle of alpine Switzerland
   static const _initial = CameraPosition(target: LatLng(46.8, 8.2), zoom: 8);
@@ -55,25 +56,17 @@ class _MapPageState extends State<MapPage> {
     _lastCamera ??= _initial;
   }
 
-  Future<void> _cycleStyle() async {
-    if (_isSwitching) return;
-
-    _currentIndex = (_currentIndex + 1) % _styles.length;
-    await _applyStyle(_currentIndex);
-    setState(() {});
-  }
-
   Future<void> _applyStyle(int index) async {
     if (_controller == null) return;
     setState(() => _isSwitching = true);
 
     final entry = _styles[index];
-    log('Switching to style ${entry.label}');
+    logger.i('Switching to style ${entry.label}');
 
     try {
       await _controller!.setStyle(entry.styleString);
     } catch (e, st) {
-      log('Failed to set style ${entry.label}: $e', stackTrace: st);
+      logger.e('Failed to set style ${entry.label}', (e, st));
       await _controller!.setStyle(_swissTopoBaseStyle);
       _currentIndex = 0;
     }
@@ -85,14 +78,19 @@ class _MapPageState extends State<MapPage> {
       appBar: AppBar(title: const Text('Map')),
       body: Stack(
         children: [
-          MapLibreMap(
-            styleString: _styles[_currentIndex].styleString,
-            trackCameraPosition: true,
-            initialCameraPosition: _initial,
-            onMapCreated: _onMapCreated,
-            onStyleLoadedCallback: _onStyleLoaded,
-            onCameraIdle: _onCameraIdle,
-            attributionButtonPosition: AttributionButtonPosition.topRight,
+          MouseRegion(
+            cursor: _isPickingMode
+                ? SystemMouseCursors.precise
+                : SystemMouseCursors.basic,
+            child: MapLibreMap(
+              styleString: _styles[_currentIndex].styleString,
+              trackCameraPosition: true,
+              initialCameraPosition: _initial,
+              onMapCreated: _onMapCreated,
+              onStyleLoadedCallback: _onStyleLoaded,
+              onCameraIdle: _onCameraIdle,
+              attributionButtonPosition: AttributionButtonPosition.topRight,
+            ),
           ),
           Positioned(
             bottom: 16,

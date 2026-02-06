@@ -36,6 +36,15 @@
       href="https://unpkg.com/maplibre-gl@^4.3/dist/maplibre-gl.css"
       rel="stylesheet"
     />
+    <style>
+      .maplibregl-canvas,
+      canvas {
+        cursor: default !important;
+      }
+      .picking-mode canvas.maplibregl-canvas {
+        cursor: crosshair !important;
+      }
+    </style>
   </head>
   <body>
     <script src="flutter_bootstrap.js" async></script>
