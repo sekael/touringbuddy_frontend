@@ -81,13 +81,12 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    final current = _styles[_currentIndex];
     return Scaffold(
       appBar: AppBar(title: const Text('Map')),
       body: Stack(
         children: [
           MapLibreMap(
-            styleString: _swissTopoBaseStyle,
+            styleString: _styles[_currentIndex].styleString,
             trackCameraPosition: true,
             initialCameraPosition: _initial,
             onMapCreated: _onMapCreated,
@@ -96,67 +95,19 @@ class _MapPageState extends State<MapPage> {
             attributionButtonPosition: AttributionButtonPosition.topRight,
           ),
           Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
+            bottom: 16,
+            right: 16,
             child: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Material(
-                  elevation: 2,
-                  borderRadius: BorderRadius.circular(16),
-                  color: Theme.of(context).colorScheme.surface,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text.rich(
-                            TextSpan(
-                              text: 'Current style: ',
-                              style: Theme.of(context).textTheme.bodyMedium
-                                  ?.copyWith(fontWeight: FontWeight.w500),
-                              children: [
-                                TextSpan(
-                                  text: current.label,
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                ),
-                              ],
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        if (_isSwitching)
-                          const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 8.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                SizedBox(
-                                  width: 16,
-                                  height: 16,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                  ),
-                                ),
-                                SizedBox(width: 8),
-                                Text('Switching...'),
-                              ],
-                            ),
-                          )
-                        else
-                          TextButton.icon(
-                            onPressed: _cycleStyle,
-                            icon: const Icon(Icons.swap_horiz),
-                            label: const Text('Change'),
-                          ),
-                      ],
-                    ),
-                  ),
-                ),
+              child: _LayerPickerFab(
+                styles: _styles,
+                selectedIndex: _currentIndex,
+                isSwitching: _isSwitching,
+                onSelected: (index) async {
+                  if (index == _currentIndex) return;
+                  _currentIndex = index;
+                  await _applyStyle(index);
+                  if (mounted) setState(() {});
+                },
               ),
             ),
           ),
@@ -170,4 +121,85 @@ class StyleEntry {
   final String label;
   final String styleString;
   const StyleEntry(this.label, this.styleString);
+}
+
+class _LayerPickerFab extends StatelessWidget {
+  final List<StyleEntry> styles;
+  final int selectedIndex;
+  final bool isSwitching;
+  final ValueChanged<int> onSelected;
+
+  const _LayerPickerFab({
+    required this.styles,
+    required this.selectedIndex,
+    required this.isSwitching,
+    required this.onSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return PopupMenuButton<int>(
+      enabled: !isSwitching,
+      tooltip: 'Map layers',
+      position: PopupMenuPosition.over,
+      onSelected: onSelected,
+      itemBuilder: (context) {
+        return List.generate(styles.length, (i) {
+          final entry = styles[i];
+          final isSelected = i == selectedIndex;
+
+          return PopupMenuItem<int>(
+            value: i,
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 24,
+                  child: isSelected
+                      ? Icon(
+                          Icons.check,
+                          size: 18,
+                          color: theme.colorScheme.primary,
+                        )
+                      : const SizedBox.shrink(),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(entry.label, overflow: TextOverflow.ellipsis),
+                ),
+              ],
+            ),
+          );
+        });
+      },
+      child: Material(
+        elevation: 6,
+        shape: const CircleBorder(),
+        color: theme.colorScheme.surface,
+        child: InkWell(
+          customBorder: const CircleBorder(),
+          onTap: isSwitching
+              ? null
+              : null, // PopupMenuButton handles taps via child
+          child: SizedBox(
+            width: 56,
+            height: 56,
+            child: Center(
+              child: isSwitching
+                  ? const SizedBox(
+                      width: 22,
+                      height: 22,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : Icon(
+                      Icons.layers_outlined,
+                      color: theme.colorScheme.onSurface,
+                    ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
