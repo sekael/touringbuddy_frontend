@@ -13,7 +13,7 @@ final GlobalKey<ScaffoldMessengerState> rootMessengerKey =
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  initializeSupabase();
+  await initializeSupabase();
   runApp(
     MultiProvider(
       providers: [
