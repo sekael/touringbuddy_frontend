@@ -10,7 +10,7 @@ class ToursService {
   ToursRepository repository = ToursRepository();
 
   Future<String> newTourFromLocation(LatLng location) {
-    String? userId = Supabase.instance.client.auth.();
+    String? userId = Supabase.instance.client.auth.currentUser?.id;
     if (userId == null) {
       logger.e('User is not logged in.');
       throw Exception('No user is currently logged in');

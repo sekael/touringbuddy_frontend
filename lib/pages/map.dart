@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
+import 'package:touringbuddy_frontend/components/crosshair.dart';
 import 'package:touringbuddy_frontend/core/logging/app_logger.dart';
-import 'package:touringbuddy_frontend/crosshair.dart';
 import 'package:touringbuddy_frontend/features/map_layers.dart';
 import 'package:touringbuddy_frontend/features/tours/tours_service.dart';
 
