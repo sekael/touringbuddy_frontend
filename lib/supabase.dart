@@ -26,6 +26,17 @@ User getCurrentUser() {
   return user;
 }
 
+Future<void> signInWithPassword(String email, String password) async {
+  Supabase.instance.client.auth.signInWithPassword(
+    email: email,
+    password: password,
+  );
+}
+
+Future<void> signUpWithPassword(String email, String password) async {
+  Supabase.instance.client.auth.signUp(email: email, password: password);
+}
+
 Future<void> signOut() async {
   await Supabase.instance.client.auth.signOut(scope: SignOutScope.global);
 }

@@ -7,6 +7,7 @@ import 'package:touringbuddy_frontend/components/crosshair.dart';
 import 'package:touringbuddy_frontend/core/logging/app_logger.dart';
 import 'package:touringbuddy_frontend/features/map_layers.dart';
 import 'package:touringbuddy_frontend/features/tours/tours_service.dart';
+import 'package:touringbuddy_frontend/features/user/auth_sheet.dart';
 import 'package:touringbuddy_frontend/features/user/user_service.dart';
 
 class MapPage extends StatefulWidget {
@@ -92,10 +93,34 @@ class _MapPageState extends State<MapPage> {
     setState(() => _isPickingLocation = false);
   }
 
+  void _showAuthSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.6,
+        maxChildSize: 0.9,
+        builder: (_, controller) => Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          padding: const EdgeInsets.all(20),
+          child: ListView(
+            controller: controller,
+            children: [
+              const AuthSheetContent(), // Separated widget for cleaner state management
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    UserService userService = context.watch<UserService>();
 
     return Scaffold(
       appBar: AppBar(title: const Text('Touring Buddy')),
@@ -142,6 +167,29 @@ class _MapPageState extends State<MapPage> {
                         await _applyStyle(index);
                         if (mounted) setState(() {});
                       },
+                    ),
+                    const SizedBox(height: 12),
+                    ElevatedButton(
+                      onPressed: () {
+                        if (context.read<UserService>().isLoggedIn) {
+                          // Show profile or logout dialog
+                          null;
+                        } else {
+                          _showAuthSheet(context);
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: theme.colorScheme.surface,
+                        disabledBackgroundColor: theme.colorScheme.secondary,
+                        disabledForegroundColor: theme.colorScheme.onSecondary,
+                        padding: EdgeInsets.all(28.0),
+                        shape: CircleBorder(),
+                      ),
+                      child: Icon(
+                        context.watch<UserService>().isLoggedIn
+                            ? Icons.person
+                            : Icons.person_outlined,
+                      ),
                     ),
                     const SizedBox(height: 12),
                     Tooltip(

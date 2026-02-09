@@ -50,7 +50,7 @@ class UserService extends ChangeNotifier {
     try {
       user = getCurrentUser();
     } on UnauthenticatedUserException catch (e) {
-      logger.e(
+      logger.w(
         'Attempted refreshing profile for a user that is not correctly logged in: ${e.toString()}',
       );
       _profileData = null;
@@ -98,6 +98,16 @@ class UserService extends ChangeNotifier {
       logger.i('Successfully saved profile data for user ${updatedProfile.id}');
       notifyListeners();
     }
+  }
+
+  Future<void> loginWithPassword(String email, String password) async {
+    await signInWithPassword(email, password);
+    notifyListeners();
+  }
+
+  Future<void> signUpWithPassword(String email, String password) async {
+    await signUpWithPassword(email, password);
+    notifyListeners();
   }
 
   // Centralized sign-out handler
