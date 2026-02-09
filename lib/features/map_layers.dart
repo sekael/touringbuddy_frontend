@@ -12,7 +12,7 @@ class LayerPickerFab extends StatelessWidget {
   final bool isSwitching;
   final ValueChanged<int> onSelected;
 
-  const LayerPickerFab({
+  LayerPickerFab({
     super.key,
     required this.styles,
     required this.selectedIndex,
@@ -20,11 +20,14 @@ class LayerPickerFab extends StatelessWidget {
     required this.onSelected,
   });
 
+  final GlobalKey<PopupMenuButtonState<int>> _menuKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return PopupMenuButton<int>(
+      key: _menuKey,
       enabled: !isSwitching,
       color: theme.colorScheme.surface,
       tooltip: 'Map layers',
@@ -58,30 +61,19 @@ class LayerPickerFab extends StatelessWidget {
           );
         });
       },
-      child: Material(
-        elevation: 6,
-        shape: const CircleBorder(),
-        color: theme.colorScheme.surface,
-        child: InkWell(
-          customBorder: const CircleBorder(),
-          onTap: null, // PopupMenuButton handles taps via child
-          child: SizedBox(
-            width: 56,
-            height: 56,
-            child: Center(
-              child: isSwitching
-                  ? const SizedBox(
-                      width: 22,
-                      height: 22,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : Icon(
-                      Icons.layers_outlined,
-                      color: theme.colorScheme.onSurface,
-                    ),
-            ),
-          ),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: theme.colorScheme.surface,
+          padding: const EdgeInsets.all(28.0),
+          shape: const CircleBorder(),
+          elevation: 4, // Matches standard FAB elevation
         ),
+        onPressed: isSwitching
+            ? null
+            : () => _menuKey.currentState?.showButtonMenu(),
+        child: isSwitching
+            ? const CircularProgressIndicator()
+            : const Icon(Icons.layers_outlined),
       ),
     );
   }
