@@ -6,8 +6,9 @@ import 'package:provider/provider.dart';
 import 'package:touringbuddy_frontend/components/crosshair.dart';
 import 'package:touringbuddy_frontend/core/logging/app_logger.dart';
 import 'package:touringbuddy_frontend/features/map_layers.dart';
+import 'package:touringbuddy_frontend/features/tours/tours_details_sheet.dart';
 import 'package:touringbuddy_frontend/features/tours/tours_service.dart';
-import 'package:touringbuddy_frontend/features/user/auth_sheet.dart';
+import 'package:touringbuddy_frontend/features/user/user_profile_sheet.dart';
 import 'package:touringbuddy_frontend/features/user/user_service.dart';
 
 class MapPage extends StatefulWidget {
@@ -78,19 +79,31 @@ class _MapPageState extends State<MapPage> {
     }
   }
 
-  void _confirmGoal() async {
+  Future<void> _confirmGoal() async {
     if (_controller == null) return;
 
-    // This gets exactly where the crosshair is pointing
     final LatLng point = _controller!.cameraPosition!.target;
 
-    // Logic to save goal or open a details form goes here
-    String tourId = await ToursService().newTourFromLocation(point);
-    logger.i(
-      'Added new tour $tourId with coordinates: ${point.latitude}, ${point.longitude}',
+    // Exit "picking" mode (so crosshair/buttons go away behind the sheet)
+    setState(() => _isPickingLocation = false);
+
+    final result = await showModalBottomSheet<TourDraft>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => TourDetailsSheet(goal: point),
     );
 
-    setState(() => _isPickingLocation = false);
+    // User dismissed / cancelled
+    if (result == null) return;
+
+    // Save tour with optional fields
+    final tourId = await ToursService().newTourFromDraft(result, point);
+
+    logger.i(
+      'Added new tour $tourId with coordinates: ${point.latitude}, ${point.longitude} '
+      'name=${result.name} plannedDate=${result.plannedDate}',
+    );
   }
 
   void _showAuthSheet(BuildContext context) {
@@ -171,12 +184,7 @@ class _MapPageState extends State<MapPage> {
                     const SizedBox(height: 12),
                     ElevatedButton(
                       onPressed: () {
-                        if (context.read<UserService>().isLoggedIn) {
-                          // Show profile or logout dialog
-                          null;
-                        } else {
-                          _showAuthSheet(context);
-                        }
+                        _showAuthSheet(context);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: theme.colorScheme.surface,

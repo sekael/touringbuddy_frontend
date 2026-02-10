@@ -1,8 +1,8 @@
 import 'package:maplibre_gl/maplibre_gl.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:touringbuddy_frontend/core/logging/app_logger.dart';
+import 'package:touringbuddy_frontend/features/tours/tours_details_sheet.dart';
 import 'package:touringbuddy_frontend/features/tours/tours_domain.dart';
 import 'package:touringbuddy_frontend/features/tours/tours_repository.dart';
+import 'package:touringbuddy_frontend/supabase.dart';
 import 'package:uuid/uuid.dart';
 
 class ToursService {
@@ -10,14 +10,23 @@ class ToursService {
   ToursRepository repository = ToursRepository();
 
   Future<String> newTourFromLocation(LatLng location) {
-    String? userId = Supabase.instance.client.auth.currentUser?.id;
-    if (userId == null) {
-      logger.e('User is not logged in.');
-      throw Exception('No user is currently logged in');
-    }
-
+    String userId = getCurrentUser().id;
     String id = uuid.v4();
+
     Tour newTour = Tour(id: id, userId: userId, goal: location);
+    return repository.insertNewTour(newTour);
+  }
+
+  Future<String> newTourFromDraft(TourDraft draft, LatLng location) {
+    String userId = getCurrentUser().id;
+    String id = uuid.v4();
+    Tour newTour = Tour(
+      id: id,
+      userId: userId,
+      goal: location,
+      plannedDate: draft.plannedDate,
+      name: draft.name,
+    );
     return repository.insertNewTour(newTour);
   }
 }

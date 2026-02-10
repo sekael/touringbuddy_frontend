@@ -32,6 +32,20 @@ class UserService extends ChangeNotifier {
     }
   }
 
+  bool get isAnonymous {
+    final user = getCurrentUser();
+
+    // Newer SDKs
+    final dynamic maybe = (user as dynamic);
+    if (maybe.isAnonymous is bool) return maybe.isAnonymous as bool;
+
+    // Fallback (works because JWT has is_anonymous; many SDKs also store provider in app_metadata)
+    final provider = (user.appMetadata['provider'] ?? '').toString();
+    return provider == 'anonymous';
+  }
+
+  bool get isPermanentUser => isLoggedIn && !isAnonymous;
+
   // Initialize after app startup
   Future<void> init() async {
     await refreshProfile();

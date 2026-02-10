@@ -5,12 +5,14 @@ class Tour {
   final String userId;
   final DateTime? plannedDate;
   final LatLng goal;
+  final String? name;
 
   Tour({
     required this.id,
     required this.userId,
     this.plannedDate,
     required this.goal,
+    this.name,
   });
 
   factory Tour.fromJson(Map<String, dynamic> json) {
@@ -21,6 +23,7 @@ class Tour {
           ? DateTime.parse(json['planned_date'])
           : null,
       goal: parseGeography(json['goal']),
+      name: json['name'],
     );
   }
 
@@ -30,6 +33,7 @@ class Tour {
       'user_id': userId,
       'planned_date': plannedDate?.toIso8601String().split('T')[0],
       'goal': 'SRID=4326;POINT(${goal.longitude} ${goal.latitude})',
+      'name': name,
     };
   }
 
