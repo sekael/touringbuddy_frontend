@@ -5,8 +5,6 @@ import 'package:touringbuddy_frontend/features/user/user_service.dart';
 import 'package:touringbuddy_frontend/pages/map.dart';
 import 'package:touringbuddy_frontend/supabase.dart';
 
-// Require user to sign in to add tours
-
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<ScaffoldMessengerState> rootMessengerKey =
     GlobalKey<ScaffoldMessengerState>();

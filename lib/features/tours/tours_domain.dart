@@ -29,10 +29,7 @@ class Tour {
       'id': id,
       'user_id': userId,
       'planned_date': plannedDate?.toIso8601String().split('T')[0],
-      'goal': {
-        'type': 'Point',
-        'coordinates': [goal.longitude, goal.latitude],
-      },
+      'goal': 'SRID=4326;POINT(${goal.longitude} ${goal.latitude})',
     };
   }
 
