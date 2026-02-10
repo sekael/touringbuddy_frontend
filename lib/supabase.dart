@@ -16,6 +16,9 @@ Future<void> initializeSupabase() async {
 
   logger.i('Initializing Supabase client with URL = $supabaseUrl');
   await Supabase.initialize(url: supabaseUrl, anonKey: supabaseAnonKey);
+
+  logger.i('Logging in user anonymously');
+  await Supabase.instance.client.auth.signInAnonymously();
 }
 
 User getCurrentUser() {

@@ -64,6 +64,13 @@ class UserService extends ChangeNotifier {
 
     try {
       _profileData = await _userProfileRepository.getUserById(user.id);
+      if (_profileData == null) {
+        logger.i(
+          'User ${user.id} does not have a user profile yet, creating new one',
+        );
+        UserProfileData newUserProfile = UserProfileData(id: user.id);
+        await saveProfileData(newUserProfile, upsert: true);
+      }
     } catch (error, stacktrace) {
       logger.e(
         'Failed to load user profile for user ${user.id}',
