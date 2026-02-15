@@ -17,8 +17,12 @@ Future<void> initializeSupabase() async {
   logger.i('Initializing Supabase client with URL = $supabaseUrl');
   await Supabase.initialize(url: supabaseUrl, anonKey: supabaseAnonKey);
 
-  logger.i('Logging in user anonymously');
-  await Supabase.instance.client.auth.signInAnonymously();
+  if (Supabase.instance.client.auth.currentSession == null) {
+    logger.i('No current session found, logging in user anonymously');
+    await Supabase.instance.client.auth.signInAnonymously();
+  } else {
+    logger.i('Existing session found, skipping anonymous sign-in');
+  }
 }
 
 User getCurrentUser() {
@@ -29,15 +33,15 @@ User getCurrentUser() {
   return user;
 }
 
-Future<void> signInWithPassword(String email, String password) async {
-  Supabase.instance.client.auth.signInWithPassword(
+Future<AuthResponse> signInWithPassword(String email, String password) async {
+  return Supabase.instance.client.auth.signInWithPassword(
     email: email,
     password: password,
   );
 }
 
-Future<void> signUpWithPassword(String email, String password) async {
-  Supabase.instance.client.auth.signUp(email: email, password: password);
+Future<AuthResponse> signUpWithPassword(String email, String password) async {
+  return Supabase.instance.client.auth.signUp(email: email, password: password);
 }
 
 Future<void> signOut() async {

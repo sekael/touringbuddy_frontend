@@ -4,6 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:touringbuddy_frontend/components/error_snackbar.dart';
 import 'package:touringbuddy_frontend/core/logging/app_logger.dart';
 import 'package:touringbuddy_frontend/features/user/user_service.dart';
+import 'package:touringbuddy_frontend/main.dart';
 
 enum _AuthStep { login, signup, upgradeAnon, checkEmail }
 
@@ -20,7 +21,7 @@ class _AuthSheetContentState extends State<AuthSheetContent> {
 
   final _emailCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
-  final _confirmCtrl = TextEditingController();
+  final _confirmPasswordCtrl = TextEditingController();
 
   _AuthStep _step = _AuthStep.login;
   bool _submitting = false;
@@ -35,13 +36,12 @@ class _AuthSheetContentState extends State<AuthSheetContent> {
   void dispose() {
     _emailCtrl.dispose();
     _passwordCtrl.dispose();
-    _confirmCtrl.dispose();
+    _confirmPasswordCtrl.dispose();
     super.dispose();
   }
 
   String get _email => _emailCtrl.text.trim();
   String get _password => _passwordCtrl.text;
-  String get _confirm => _confirmCtrl.text;
 
   Future<void> _upgradeAnonymous() async {
     if (_submitting) return;
@@ -130,21 +130,9 @@ class _AuthSheetContentState extends State<AuthSheetContent> {
   }
 
   void _showError(String msg) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(ErrorSnackbar(message: msg).build());
-  }
-
-  // NOTE: Supabase auth errors come as AuthException. The messages differ slightly
-  // across versions/settings, so we use a tolerant matcher.
-  bool _looksLikeNoUser(AuthException e) {
-    final m = e.message.toLowerCase();
-    return m.contains('user not found') ||
-        m.contains('invalid login credentials') ||
-        m.contains('invalid_credentials') ||
-        m.contains(
-          'email not confirmed',
-        ); // sometimes appears depending on settings
+    rootMessengerKey.currentState?.showSnackBar(
+      ErrorSnackbar(message: msg).build(),
+    );
   }
 
   Future<void> _login() async {
@@ -157,39 +145,19 @@ class _AuthSheetContentState extends State<AuthSheetContent> {
 
     try {
       logger.i('Signing in with password for $_email');
-
-      final res = await Supabase.instance.client.auth.signInWithPassword(
-        email: _email,
-        password: _password,
-      );
-
-      // If sign-in succeeds, session is typically non-null.
-      // But to be safe, check currentSession.
-      final session =
-          res.session ?? Supabase.instance.client.auth.currentSession;
-      if (session == null) {
-        _showError('Login failed (no session returned).');
-        return;
-      }
-
-      await context.read<UserService>().refreshProfile();
-
+      context.read<UserService>().loginWithPassword(_email, _password);
+      logger.i('Successfully signed in user $_email');
       if (mounted) Navigator.of(context).pop();
     } on AuthException catch (e) {
       logger.w('Login failed: ${e.message}');
 
-      // “No account / wrong password” often share the same message.
-      // We handle it as: prompt to create account OR retry password.
-      if (!mounted) return;
-
-      _showError(
-        'Could not log you in. If you don’t have an account yet, create one below.',
-      );
-
-      setState(() {
-        _step = _AuthStep.signup;
-        _confirmCtrl.clear();
-      });
+      final msg = e.message.toLowerCase();
+      if (msg.contains('email not confirmed') ||
+          msg.contains('not confirmed')) {
+        _showError('Please confirm your email address before logging in.');
+      } else {
+        _showError('Invalid email or password');
+      }
     } catch (e) {
       if (!mounted) return;
       _showError('Something went wrong: $e');
@@ -207,46 +175,26 @@ class _AuthSheetContentState extends State<AuthSheetContent> {
     setState(() => _submitting = true);
 
     try {
-      logger.i('Signing up with email/password for $_email');
+      final us = context.read<UserService>();
+      logger.i('Signing up with email and password for $_email');
+      await us.signUpWithEmailPassword(_email, _password);
 
-      final res = await Supabase.instance.client.auth.signUp(
-        email: _email,
-        password: _password,
-        // You can pass additional profile info here if you want:
-        // data: {'first_name': '...', 'last_name': '...'},
-      );
-
-      // Depending on Supabase Auth settings:
-      // - If email confirmation is OFF: session is returned, user is logged in.
-      // - If email confirmation is ON: session is null; user must confirm email.
-      final session =
-          res.session ?? Supabase.instance.client.auth.currentSession;
-
-      if (session != null) {
-        await context.read<UserService>().refreshProfile();
+      if (us.isLoggedIn) {
         if (mounted) Navigator.of(context).pop();
       } else {
-        // Email confirmation enabled
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
+        rootMessengerKey.currentState?.showSnackBar(
           const SnackBar(
-            content: Text(
-              'Account created. Please check your email to confirm.',
-            ),
+            content: Text('Account created. Please confirm your email.'),
           ),
         );
-
-        // Usually you keep the sheet open or return to login.
-        setState(() => _step = _AuthStep.login);
+        setState(() {
+          _step = _AuthStep.login;
+        });
       }
     } on AuthException catch (e) {
-      logger.w('Signup failed: ${e.message}');
-      if (!mounted) return;
-
       final msgLower = e.message.toLowerCase();
       if (msgLower.contains('already registered') ||
-          msgLower.contains('user already exists') ||
-          msgLower.contains('duplicate')) {
+          msgLower.contains('user already exists')) {
         _showError('An account with this email already exists. Please log in.');
         setState(() => _step = _AuthStep.login);
       } else {
@@ -384,7 +332,7 @@ class _AuthSheetContentState extends State<AuthSheetContent> {
                 : () {
                     setState(() {
                       _step = _AuthStep.signup;
-                      _confirmCtrl.clear();
+                      _confirmPasswordCtrl.clear();
                     });
                   },
             child: const Text("Don’t have an account? Create one"),
@@ -419,7 +367,7 @@ class _AuthSheetContentState extends State<AuthSheetContent> {
           _passwordField(controller: _passwordCtrl, label: 'New password'),
           const SizedBox(height: 12),
           TextFormField(
-            controller: _confirmCtrl,
+            controller: _confirmPasswordCtrl,
             obscureText: _obscure,
             decoration: const InputDecoration(
               labelText: 'Confirm password',
@@ -464,7 +412,7 @@ class _AuthSheetContentState extends State<AuthSheetContent> {
           const SizedBox(height: 12),
           // confirm password as you already have
           TextFormField(
-            controller: _confirmCtrl,
+            controller: _confirmPasswordCtrl,
             obscureText: _obscure,
             decoration: const InputDecoration(
               labelText: 'Confirm password',
@@ -491,8 +439,7 @@ class _AuthSheetContentState extends State<AuthSheetContent> {
           TextButton(
             onPressed: _submitting
                 ? null
-                : () async {
-                    await Supabase.instance.client.auth.signOut();
+                : () {
                     setState(() => _step = _AuthStep.login);
                   },
             child: const Text('I already have an account (log in instead)'),
@@ -514,9 +461,11 @@ class _AuthSheetContentState extends State<AuthSheetContent> {
     if (userService.isAnonymous) {
       return AnimatedSwitcher(
         duration: const Duration(milliseconds: 220),
-        child: (_step == _AuthStep.checkEmail)
-            ? _buildCheckEmailStep()
-            : _buildUpgradeAnonStep(context),
+        child: switch (_step) {
+          _AuthStep.login => _buildLoginStep(context),
+          _AuthStep.checkEmail => _buildCheckEmailStep(),
+          _ => _buildUpgradeAnonStep(context),
+        },
       );
     }
 

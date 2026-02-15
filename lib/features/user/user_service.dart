@@ -33,7 +33,13 @@ class UserService extends ChangeNotifier {
   }
 
   bool get isAnonymous {
-    final user = getCurrentUser();
+    User user;
+
+    try {
+      user = getCurrentUser();
+    } catch (_) {
+      return false;
+    }
 
     // Newer SDKs
     final dynamic maybe = (user as dynamic);
@@ -123,11 +129,18 @@ class UserService extends ChangeNotifier {
 
   Future<void> loginWithPassword(String email, String password) async {
     await signInWithPassword(email, password);
+    await refreshProfile();
     notifyListeners();
   }
 
-  Future<void> signUpWithPassword(String email, String password) async {
-    await signUpWithPassword(email, password);
+  Future<void> signUpWithEmailPassword(String email, String password) async {
+    final res = await signUpWithPassword(email, password);
+    if (res.session == null) {
+      notifyListeners();
+      return;
+    }
+
+    await refreshProfile();
     notifyListeners();
   }
 
