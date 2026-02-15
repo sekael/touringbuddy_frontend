@@ -33,15 +33,26 @@ User getCurrentUser() {
   return user;
 }
 
-Future<AuthResponse> signInWithPassword(String email, String password) async {
-  return Supabase.instance.client.auth.signInWithPassword(
-    email: email,
-    password: password,
+Future<UserResponse> updateUserEmail(String email) async {
+  return Supabase.instance.client.auth.updateUser(UserAttributes(email: email));
+}
+
+Future<UserResponse> updatePasswordForCurrentUser(String password) async {
+  return Supabase.instance.client.auth.updateUser(
+    UserAttributes(password: password),
   );
 }
 
-Future<AuthResponse> signUpWithPassword(String email, String password) async {
-  return Supabase.instance.client.auth.signUp(email: email, password: password);
+Future<void> sendEmailOtp(String email) async {
+  await Supabase.instance.client.auth.signInWithOtp(email: email);
+}
+
+Future<AuthResponse> verifyOtp(String email, String code) async {
+  return Supabase.instance.client.auth.verifyOTP(
+    type: OtpType.email,
+    token: code,
+    email: email,
+  );
 }
 
 Future<void> signOut() async {

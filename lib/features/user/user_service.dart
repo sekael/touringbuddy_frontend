@@ -127,20 +127,8 @@ class UserService extends ChangeNotifier {
     }
   }
 
-  Future<void> loginWithPassword(String email, String password) async {
-    await signInWithPassword(email, password);
-    await refreshProfile();
-    notifyListeners();
-  }
-
-  Future<void> signUpWithEmailPassword(String email, String password) async {
-    final res = await signUpWithPassword(email, password);
-    if (res.session == null) {
-      notifyListeners();
-      return;
-    }
-
-    await refreshProfile();
+  Future<void> linkAnonymousToEmail(String email) async {
+    await updateUserEmail(email);
     notifyListeners();
   }
 
