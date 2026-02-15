@@ -96,6 +96,7 @@ class _AuthSheetContentState extends State<AuthSheetContent> {
       if (session != null) {
         if (!mounted) return;
         logger.i('Session is now active');
+        Navigator.of(context).pop();
       } else {
         if (!mounted) return;
         _verificationCodeControl.clear();
