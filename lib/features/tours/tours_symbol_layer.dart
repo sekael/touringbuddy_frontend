@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/services.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:touringbuddy_frontend/components/error_snackbar.dart';
@@ -10,7 +12,7 @@ class ToursSymbolLayer {
   static const _sourceId = 'symbol_source';
   static const _layerId = 'symbol_layer';
   static const _symbolName = 'custom_marker';
-  static const _assetPath = 'assets/icons/location-icon.png';
+  static const _assetPath = 'icons/location-icon.png';
 
   bool _imageAdded = false;
   bool _sourceAdded = false;
@@ -18,8 +20,12 @@ class ToursSymbolLayer {
 
   List<Tour> _cachedTours = const [];
 
+  // Completes when current style has image/source/layer installed
+  Completer<void> _toursSymbolsReady = Completer<void>();
+
   void attach(MapLibreMapController controller) {
     _controller = controller;
+    _resetReady();
   }
 
   void detach() {
@@ -28,12 +34,24 @@ class ToursSymbolLayer {
     _sourceAdded = false;
     _layerAdded = false;
     _cachedTours = const [];
+    _resetReady();
   }
 
   Future<void> setTours(List<Tour> tours) async {
     _cachedTours = tours;
     final c = _controller;
     if (c == null) return;
+
+    // Wait until style is ready
+    try {
+      await _toursSymbolsReady.future;
+    } catch (_) {
+      return;
+    }
+
+    // Defensive: ensure source exists even if setTours is called early
+    await _ensureGeoJsonSourceAdded();
+
     final featureCollection = _featureCollectionJson(tours);
     c.setGeoJsonSource(_sourceId, featureCollection);
   }
@@ -47,12 +65,29 @@ class ToursSymbolLayer {
     _imageAdded = false;
     _sourceAdded = false;
     _layerAdded = false;
+    _resetReady();
 
-    await _ensureImageLoaded();
-    await _ensureGeoJsonSourceAdded();
-    await _ensureSymbolLayerAdded();
+    try {
+      await _ensureImageLoaded();
+      await _ensureGeoJsonSourceAdded();
+      await _ensureSymbolLayerAdded();
 
-    await setTours(_cachedTours);
+      if (!_toursSymbolsReady.isCompleted) _toursSymbolsReady.complete();
+
+      await setTours(_cachedTours);
+    } catch (e, st) {
+      logger.e('Failed to load style in tours symbol layer: $e');
+      if (!_toursSymbolsReady.isCompleted) {
+        _toursSymbolsReady.completeError(e, st);
+      }
+    }
+  }
+
+  void _resetReady() {
+    if (!_toursSymbolsReady.isCompleted) {
+      // Recreate
+    }
+    _toursSymbolsReady = Completer<void>();
   }
 
   Future<void> _ensureImageLoaded() async {
@@ -91,13 +126,12 @@ class ToursSymbolLayer {
         _sourceId,
         _layerId,
         SymbolLayerProperties(
-          // Icon properties
           iconImage: _symbolName,
           iconSize: 1.0,
           iconOffset: [0, 0],
           iconAllowOverlap: true,
           iconIgnorePlacement: false,
-          // Text properties
+          iconAnchor: 'bottom',
           symbolPlacement: 'point',
           symbolSpacing: 250.0,
           symbolAvoidEdges: false,
