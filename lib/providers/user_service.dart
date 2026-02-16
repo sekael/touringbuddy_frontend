@@ -1,7 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:touringbuddy_frontend/components/error_snackbar.dart';
-import 'package:touringbuddy_frontend/core/exceptions/no_user_profile_exception.dart';
 import 'package:touringbuddy_frontend/core/exceptions/unauthenticated_user_exception.dart';
 import 'package:touringbuddy_frontend/core/logging/app_logger.dart';
 import 'package:touringbuddy_frontend/features/user/user_profile_repository.dart';
@@ -10,10 +11,7 @@ import 'package:touringbuddy_frontend/models/user_profile.dart';
 import 'package:touringbuddy_frontend/supabase.dart';
 
 class UserService extends ChangeNotifier {
-  UserService({required UserProfileRepository userProfileRepository})
-    : _userProfileRepository = userProfileRepository;
-
-  final UserProfileRepository _userProfileRepository;
+  final UserProfileRepository _repository = UserProfileRepository();
 
   UserProfileData? _profileData;
   bool _loadingProfile = false;
@@ -57,13 +55,6 @@ class UserService extends ChangeNotifier {
     await refreshProfile();
   }
 
-  UserProfileData getLoggedInUserProfile() {
-    if (profileData == null) {
-      throw NoUserProfileException(userId: getCurrentUser().id);
-    }
-    return profileData!;
-  }
-
   // Reload profile of current user from database
   Future<void> refreshProfile() async {
     User user;
@@ -83,7 +74,7 @@ class UserService extends ChangeNotifier {
     notifyListeners();
 
     try {
-      _profileData = await _userProfileRepository.getUserById(user.id);
+      _profileData = await _repository.getUserById(user.id);
       if (_profileData == null) {
         logger.i(
           'User ${user.id} does not have a user profile yet, creating new one',
@@ -111,9 +102,9 @@ class UserService extends ChangeNotifier {
   }) async {
     try {
       if (upsert) {
-        await _userProfileRepository.upsertMyUser(updatedProfile);
+        await _repository.upsertMyUser(updatedProfile);
       } else {
-        await _userProfileRepository.updateMyUser(updatedProfile);
+        await _repository.updateMyUser(updatedProfile);
       }
     } on PostgrestException catch (e) {
       logger.e(
@@ -125,11 +116,6 @@ class UserService extends ChangeNotifier {
       logger.i('Successfully saved profile data for user ${updatedProfile.id}');
       notifyListeners();
     }
-  }
-
-  Future<void> linkAnonymousToEmail(String email) async {
-    await updateUserEmail(email);
-    notifyListeners();
   }
 
   // Centralized sign-out handler

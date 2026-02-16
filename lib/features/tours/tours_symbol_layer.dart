@@ -127,9 +127,9 @@ class ToursSymbolLayer {
         _layerId,
         SymbolLayerProperties(
           iconImage: _symbolName,
-          iconSize: 1.0,
+          iconSize: 0.8,
           iconOffset: [0, 0],
-          iconAllowOverlap: true,
+          iconAllowOverlap: false,
           iconIgnorePlacement: false,
           iconAnchor: 'bottom',
           symbolPlacement: 'point',

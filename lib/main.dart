@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:touringbuddy_frontend/features/user/user_profile_repository.dart';
 import 'package:touringbuddy_frontend/pages/map.dart';
 import 'package:touringbuddy_frontend/providers/tours_service.dart';
 import 'package:touringbuddy_frontend/providers/user_service.dart';
@@ -16,11 +15,7 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) =>
-              UserService(userProfileRepository: UserProfileRepository())
-                ..init(),
-        ),
+        ChangeNotifierProvider(create: (_) => UserService()..init()),
         ChangeNotifierProvider(create: (_) => ToursService()),
       ],
       child: MainApp(),

@@ -24,6 +24,7 @@ class _AuthSheetContentState extends State<AuthSheetContent> {
   final _verificationCodeControl = TextEditingController();
   bool _isValid = false;
   bool _submitting = false;
+  bool _validating = false;
 
   // Simple RFC5322-ish email regex (good enough for UI validation)
   static final _emailRegExp = RegExp(
@@ -61,6 +62,9 @@ class _AuthSheetContentState extends State<AuthSheetContent> {
 
   Future<void> _sendLoginCode() async {
     final String email = _emailCtrl.text.trim();
+    setState(() {
+      _submitting = true;
+    });
     try {
       logger.i('Sending email containing verification code');
       await sendEmailOtp(email);
@@ -77,12 +81,17 @@ class _AuthSheetContentState extends State<AuthSheetContent> {
     } catch (_) {
       if (!mounted) return;
       _showError('Could not send verification code. Please try again');
+    } finally {
+      setState(() {
+        _submitting = false;
+      });
     }
   }
 
   Future<void> _verify(String email) async {
-    if (_submitting) return;
-    setState(() => _submitting = true);
+    if (_validating) return;
+    setState(() => _validating = true);
+
     try {
       // Verify OTP verification code
       logger.i('Verifying code');
@@ -114,7 +123,7 @@ class _AuthSheetContentState extends State<AuthSheetContent> {
       _verificationCodeControl.clear();
       _showError('Something went wrong');
     } finally {
-      if (mounted) setState(() => _submitting = false);
+      if (mounted) setState(() => _validating = false);
     }
   }
 
@@ -215,7 +224,7 @@ class _AuthSheetContentState extends State<AuthSheetContent> {
             child: ElevatedButton(
               onPressed: _submitting ? null : _sendLoginCode,
               child: Text(
-                _submitting ? 'Send Login Code' : 'Sending Login Code ...',
+                _submitting ? 'Sending Login Code ...' : 'Send Login Code',
               ),
             ),
           ),
@@ -237,10 +246,10 @@ class _AuthSheetContentState extends State<AuthSheetContent> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: _submitting
+              onPressed: _validating
                   ? null
                   : () => _verify(_emailCtrl.text.trim()),
-              child: Text(_submitting ? 'Verify Code' : 'Verifying Code ...'),
+              child: Text(_validating ? 'Verifying Code ...' : 'Verify Code'),
             ),
           ),
           TextButton(

@@ -8,7 +8,7 @@ import 'package:uuid/uuid.dart';
 
 class ToursService extends ChangeNotifier {
   Uuid uuid = Uuid();
-  ToursRepository repository = ToursRepository();
+  final ToursRepository _repository = ToursRepository();
 
   List<Tour> _tours = [];
 
@@ -22,7 +22,7 @@ class ToursService extends ChangeNotifier {
     String id = uuid.v4();
 
     Tour newTour = Tour(id: id, userId: userId, goal: location);
-    return repository.insertNewTour(newTour);
+    return _repository.insertNewTour(newTour);
   }
 
   Future<String> newTourFromDraft(TourDraft draft, LatLng location) {
@@ -35,12 +35,12 @@ class ToursService extends ChangeNotifier {
       plannedDate: draft.plannedDate,
       name: draft.name,
     );
-    return repository.insertNewTour(newTour);
+    return _repository.insertNewTour(newTour);
   }
 
   Future<void> getToursForCurrentUser() async {
     final userId = getCurrentUser().id;
-    final tours = await repository.listToursForUser(userId);
+    final tours = await _repository.listToursForUser(userId);
     _tours = tours;
     notifyListeners();
   }
