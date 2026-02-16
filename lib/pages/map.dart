@@ -161,7 +161,7 @@ class _MapPageState extends State<MapPage> {
     await context.read<ToursService>().getToursForCurrentUser();
   }
 
-  void _showAuthSheet(BuildContext context) {
+  void _showProfileSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -177,9 +177,7 @@ class _MapPageState extends State<MapPage> {
           padding: const EdgeInsets.all(20),
           child: ListView(
             controller: controller,
-            children: [
-              const AuthSheetContent(), // Separated widget for cleaner state management
-            ],
+            children: [const UserProfileSheet()],
           ),
         ),
       ),
@@ -238,7 +236,7 @@ class _MapPageState extends State<MapPage> {
                     const SizedBox(height: 12),
                     ElevatedButton(
                       onPressed: () {
-                        _showAuthSheet(context);
+                        _showProfileSheet(context);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: theme.colorScheme.surface,

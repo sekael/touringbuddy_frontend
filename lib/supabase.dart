@@ -16,13 +16,6 @@ Future<void> initializeSupabase() async {
 
   logger.i('Initializing Supabase client with URL = $supabaseUrl');
   await Supabase.initialize(url: supabaseUrl, anonKey: supabaseAnonKey);
-
-  if (Supabase.instance.client.auth.currentSession == null) {
-    logger.i('No current session found, logging in user anonymously');
-    await Supabase.instance.client.auth.signInAnonymously();
-  } else {
-    logger.i('Existing session found, skipping anonymous sign-in');
-  }
 }
 
 User getCurrentUser() {
@@ -31,16 +24,6 @@ User getCurrentUser() {
     throw UnauthenticatedUserException();
   }
   return user;
-}
-
-Future<UserResponse> updateUserEmail(String email) async {
-  return Supabase.instance.client.auth.updateUser(UserAttributes(email: email));
-}
-
-Future<UserResponse> updatePasswordForCurrentUser(String password) async {
-  return Supabase.instance.client.auth.updateUser(
-    UserAttributes(password: password),
-  );
 }
 
 Future<void> sendEmailOtp(String email) async {

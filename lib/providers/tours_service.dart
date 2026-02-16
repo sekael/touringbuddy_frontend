@@ -13,7 +13,6 @@ class ToursService extends ChangeNotifier {
   List<Tour> _tours = [];
 
   List<Tour> get tours {
-    getCurrentUser();
     return List.unmodifiable(_tours);
   }
 

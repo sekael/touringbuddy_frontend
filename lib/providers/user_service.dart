@@ -21,34 +21,7 @@ class UserService extends ChangeNotifier {
   UserProfileData? get profileData => _profileData;
   bool get loadingProfile => _loadingProfile;
   bool get signingOut => _signingOut;
-  bool get isLoggedIn {
-    try {
-      final _ = getCurrentUser();
-      return true;
-    } catch (_) {
-      return false;
-    }
-  }
-
-  bool get isAnonymous {
-    User user;
-
-    try {
-      user = getCurrentUser();
-    } catch (_) {
-      return false;
-    }
-
-    // Newer SDKs
-    final dynamic maybe = (user as dynamic);
-    if (maybe.isAnonymous is bool) return maybe.isAnonymous as bool;
-
-    // Fallback (works because JWT has is_anonymous; many SDKs also store provider in app_metadata)
-    final provider = (user.appMetadata['provider'] ?? '').toString();
-    return provider == 'anonymous';
-  }
-
-  bool get isPermanentUser => isLoggedIn && !isAnonymous;
+  bool get isLoggedIn => Supabase.instance.client.auth.currentSession != null;
 
   // Initialize after app startup
   Future<void> init() async {
@@ -131,6 +104,7 @@ class UserService extends ChangeNotifier {
       // Clear cached profile data
       _profileData = null;
       notifyListeners();
+      rootNavigatorKey.currentState?.popUntil((route) => route.isFirst);
     } on AuthException catch (e, st) {
       logger.e('Authentication error when trying to sign out', e, st);
       rootMessengerKey.currentState?.showSnackBar(
