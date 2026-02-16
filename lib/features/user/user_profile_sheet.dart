@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:touringbuddy_frontend/components/error_snackbar.dart';
 import 'package:touringbuddy_frontend/core/logging/app_logger.dart';
-import 'package:touringbuddy_frontend/features/user/user_service.dart';
 import 'package:touringbuddy_frontend/main.dart';
+import 'package:touringbuddy_frontend/providers/user_service.dart';
 import 'package:touringbuddy_frontend/supabase.dart';
 
 enum _AuthStep { login, verify }

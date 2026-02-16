@@ -5,11 +5,11 @@ import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:provider/provider.dart';
 import 'package:touringbuddy_frontend/components/crosshair.dart';
 import 'package:touringbuddy_frontend/core/logging/app_logger.dart';
-import 'package:touringbuddy_frontend/features/map_layers.dart';
+import 'package:touringbuddy_frontend/features/base_maps.dart';
 import 'package:touringbuddy_frontend/features/tours/tours_details_sheet.dart';
-import 'package:touringbuddy_frontend/features/tours/tours_service.dart';
 import 'package:touringbuddy_frontend/features/user/user_profile_sheet.dart';
-import 'package:touringbuddy_frontend/features/user/user_service.dart';
+import 'package:touringbuddy_frontend/providers/tours_service.dart';
+import 'package:touringbuddy_frontend/providers/user_service.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});

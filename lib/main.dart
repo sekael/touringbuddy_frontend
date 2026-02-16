@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:touringbuddy_frontend/features/user/user_profile_repository.dart';
-import 'package:touringbuddy_frontend/features/user/user_service.dart';
 import 'package:touringbuddy_frontend/pages/map.dart';
+import 'package:touringbuddy_frontend/providers/tours_service.dart';
+import 'package:touringbuddy_frontend/providers/user_service.dart';
 import 'package:touringbuddy_frontend/supabase.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -20,6 +21,7 @@ Future<void> main() async {
               UserService(userProfileRepository: UserProfileRepository())
                 ..init(),
         ),
+        ChangeNotifierProvider(create: (_) => ToursService()),
       ],
       child: MainApp(),
     ),

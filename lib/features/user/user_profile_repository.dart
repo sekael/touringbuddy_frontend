@@ -23,7 +23,6 @@ class UserProfileRepository {
   /// Update the current user with new values.
   /// Throws [Exception] if the current user is not authenticated or trying to update a different user.
   /// Throws [PostgresException] if there is an issue updating the user in the database.
-  @override
   Future<void> updateMyUser(UserProfileData updatedUser) async {
     User myUser = getCurrentUser();
 
@@ -38,7 +37,6 @@ class UserProfileRepository {
     await _client.from(_table).update(updatedUser.toMap()).eq('id', userId);
   }
 
-  @override
   Future<void> upsertMyUser(UserProfileData updatedUser) async {
     User myUser = getCurrentUser();
 

@@ -30,7 +30,7 @@ class LayerPickerFab extends StatelessWidget {
       key: _menuKey,
       enabled: !isSwitching,
       color: theme.colorScheme.surface,
-      tooltip: 'Map layers',
+      tooltip: 'Base maps',
       position: PopupMenuPosition.over,
       onSelected: onSelected,
       itemBuilder: (context) {
