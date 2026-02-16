@@ -35,7 +35,7 @@ class MainApp extends StatelessWidget {
       ),
       scaffoldMessengerKey: rootMessengerKey,
       navigatorKey: rootNavigatorKey,
-      home: AuthGate(),
+      home: const AuthGate(),
     );
   }
 }

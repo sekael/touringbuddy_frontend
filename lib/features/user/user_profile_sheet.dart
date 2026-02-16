@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:touringbuddy_frontend/main.dart';
 import 'package:touringbuddy_frontend/providers/user_service.dart';
 
 class UserProfileSheet extends StatelessWidget {
@@ -41,6 +42,7 @@ class UserProfileSheet extends StatelessWidget {
             onPressed: () async {
               await userService.handleSignOut();
               if (context.mounted) Navigator.of(context).pop();
+              rootNavigatorKey.currentState?.popUntil((r) => r.isFirst);
             },
           ),
         ),

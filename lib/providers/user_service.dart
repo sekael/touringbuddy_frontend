@@ -104,7 +104,6 @@ class UserService extends ChangeNotifier {
       // Clear cached profile data
       _profileData = null;
       notifyListeners();
-      rootNavigatorKey.currentState?.popUntil((route) => route.isFirst);
     } on AuthException catch (e, st) {
       logger.e('Authentication error when trying to sign out', e, st);
       rootMessengerKey.currentState?.showSnackBar(

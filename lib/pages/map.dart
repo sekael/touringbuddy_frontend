@@ -23,16 +23,20 @@ class _MapPageState extends State<MapPage> {
   MapLibreMapController? _controller;
   late final ToursSymbolLayer _toursSymbolLayer;
 
+  late ToursService _toursService;
+  late UserService _userService;
   VoidCallback? _toursListener;
   VoidCallback? _userListener;
 
   int _currentIndex = 0;
   bool _isSwitchingLayer = false;
   bool _isPickingLocation = false;
+  bool _disposed = false;
+  int _authOperationToken =
+      0; // Increments to invalidate in-flight async operations
 
   // Middle of alpine Switzerland
   static const _initial = CameraPosition(target: LatLng(46.8, 8.2), zoom: 8);
-
   static const String _swissTopoBaseStyle =
       'https://vectortiles.geo.admin.ch/styles/ch.swisstopo.basemap.vt/style.json';
   static const String _swissTopoFullStyle = 'assets/swisstopo_wmts_style.json';
@@ -45,51 +49,81 @@ class _MapPageState extends State<MapPage> {
   void initState() {
     super.initState();
     _toursSymbolLayer = ToursSymbolLayer();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final toursService = context.read<ToursService>();
-      final userService = context.read<UserService>();
-      _toursListener = () {
-        // Any change in ToursService updates symbols
-        _toursSymbolLayer.setTours(toursService.tours);
-      };
-
-      _userListener = () async {
-        // Login/logout also update tour visibility
-        if (userService.isLoggedIn) {
-          await toursService.getToursForCurrentUser();
-          await _toursSymbolLayer.setTours(toursService.tours);
-        } else {
-          toursService.clear();
-          await _toursSymbolLayer.clear();
-        }
-      };
-
-      toursService.addListener(_toursListener!);
-      userService.addListener(_userListener!);
-
-      // Initial sync
-      _userListener!.call();
-    });
   }
 
   @override
-  void dispose() {
-    _toursSymbolLayer.detach();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    _toursService = context.read<ToursService>();
+    _userService = context.read<UserService>();
+    _removeListeners();
+
+    _toursListener = () {
+      if (_disposed) return;
+      // Any change in ToursService updates symbols
+      _toursSymbolLayer.setTours(_toursService.tours);
+    };
+
+    _userListener = () {
+      _handleAuthChanged(_userService.isLoggedIn);
+    };
+
+    _toursService.addListener(_toursListener!);
+    _userService.addListener(_userListener!);
+
+    // Initial sync
+    _handleAuthChanged(_userService.isLoggedIn);
+  }
+
+  Future<void> _handleAuthChanged(bool isLoggedIn) async {
+    if (_disposed) return;
+
+    final token = ++_authOperationToken; // invalidate previous auth ops
+
+    if (isLoggedIn) {
+      try {
+        await _toursService.getToursForCurrentUser();
+        if (_disposed || token != _authOperationToken) return;
+
+        // Only touch layer if controller/style are ready-ish
+        await _toursSymbolLayer.setTours(_toursService.tours);
+      } catch (e) {
+        logger.w('Error handling auth changes in map page: $e');
+      }
+    } else {
+      // Clear app state synchronously
+      _toursService.clear();
+
+      // Best-effort clear layer (don’t await if it causes issues on dispose)
+      try {
+        await _toursSymbolLayer.clear();
+      } catch (_) {}
+    }
+  }
+
+  void _removeListeners() {
     final tl = _toursListener;
     if (tl != null) {
-      try {
-        context.read<ToursService>().removeListener(tl);
-      } catch (_) {}
+      _toursService.removeListener(tl);
+      _toursListener = null;
     }
 
     final ul = _userListener;
     if (ul != null) {
-      try {
-        context.read<UserService>().removeListener(ul);
-      } catch (_) {}
+      _userService.removeListener(ul);
+      _userListener = null;
     }
+  }
 
+  @override
+  void dispose() {
+    _disposed = true;
+    _authOperationToken++;
+    _removeListeners();
+
+    _toursSymbolLayer.detach();
+    _controller = null;
     super.dispose();
   }
 
