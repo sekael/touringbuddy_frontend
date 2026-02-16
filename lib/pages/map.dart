@@ -7,6 +7,7 @@ import 'package:touringbuddy_frontend/components/crosshair.dart';
 import 'package:touringbuddy_frontend/core/logging/app_logger.dart';
 import 'package:touringbuddy_frontend/features/base_maps.dart';
 import 'package:touringbuddy_frontend/features/tours/tours_details_sheet.dart';
+import 'package:touringbuddy_frontend/features/tours/tours_symbol_layer.dart';
 import 'package:touringbuddy_frontend/features/user/user_profile_sheet.dart';
 import 'package:touringbuddy_frontend/providers/tours_service.dart';
 import 'package:touringbuddy_frontend/providers/user_service.dart';
@@ -20,47 +21,94 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   MapLibreMapController? _controller;
+  late final ToursSymbolLayer _toursSymbolLayer;
+
+  VoidCallback? _toursListener;
+  VoidCallback? _userListener;
+
   int _currentIndex = 0;
   bool _isSwitchingLayer = false;
   bool _isPickingLocation = false;
 
   // Middle of alpine Switzerland
   static const _initial = CameraPosition(target: LatLng(46.8, 8.2), zoom: 8);
-  CameraPosition? _lastCamera;
 
   static const String _swissTopoBaseStyle =
       'https://vectortiles.geo.admin.ch/styles/ch.swisstopo.basemap.vt/style.json';
   static const String _swissTopoFullStyle = 'assets/swisstopo_wmts_style.json';
-
   late final List<StyleEntry> _styles = [
     const StyleEntry('Swisstopo Base', _swissTopoBaseStyle),
     const StyleEntry('Swisstopo Full Color', _swissTopoFullStyle),
   ];
 
-  void _onMapCreated(MapLibreMapController c) {
-    _controller = c;
-    c.addListener(() {
-      if (!c.isCameraMoving) return;
-      _lastCamera = c.cameraPosition;
+  @override
+  void initState() {
+    super.initState();
+    _toursSymbolLayer = ToursSymbolLayer();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final toursService = context.read<ToursService>();
+      final userService = context.read<UserService>();
+      _toursListener = () {
+        // Any change in ToursService updates symbols
+        _toursSymbolLayer.setTours(toursService.tours);
+      };
+
+      _userListener = () async {
+        // Login/logout also update tour visibility
+        if (userService.isLoggedIn) {
+          await toursService.getToursForCurrentUser();
+          await _toursSymbolLayer.setTours(toursService.tours);
+        } else {
+          toursService.clear();
+          await _toursSymbolLayer.clear();
+        }
+      };
+
+      toursService.addListener(_toursListener!);
+      userService.addListener(_userListener!);
+
+      // Initial sync
+      _userListener!.call();
     });
   }
 
-  Future<void> _onStyleLoaded() async {
-    if (_lastCamera != null && _controller != null) {
-      await _controller!.moveCamera(
-        CameraUpdate.newCameraPosition(_lastCamera!),
-      );
+  @override
+  void dispose() {
+    _toursSymbolLayer.detach();
+    final tl = _toursListener;
+    if (tl != null) {
+      try {
+        context.read<ToursService>().removeListener(tl);
+      } catch (_) {}
     }
-    if (mounted) {
-      setState(() {
-        _isSwitchingLayer = false;
-      });
+
+    final ul = _userListener;
+    if (ul != null) {
+      try {
+        context.read<UserService>().removeListener(ul);
+      } catch (_) {}
     }
+
+    super.dispose();
   }
 
-  void _onCameraIdle() {
-    if (_controller == null) return;
-    _lastCamera ??= _initial;
+  void _onMapCreated(MapLibreMapController c) {
+    _controller = c;
+    _toursSymbolLayer.attach(_controller!);
+  }
+
+  Future<void> _onStyleLoaded() async {
+    // Recreate symbol layer after every style load
+    await _toursSymbolLayer.onStyleLoaded();
+
+    // Make sure current state is applied (if tours loaded already)
+    if (!mounted) return;
+    final toursService = context.read<ToursService>();
+    await _toursSymbolLayer.setTours(toursService.tours);
+    setState(() {
+      _isSwitchingLayer = false;
+    });
   }
 
   Future<void> _applyStyle(int index) async {
@@ -98,12 +146,19 @@ class _MapPageState extends State<MapPage> {
     if (result == null) return;
 
     // Save tour with optional fields
-    final tourId = await ToursService().newTourFromDraft(result, point);
+    if (!mounted) return;
+    final tourId = await context.read<ToursService>().newTourFromDraft(
+      result,
+      point,
+    );
 
     logger.i(
       'Added new tour $tourId with coordinates: ${point.latitude}, ${point.longitude} '
       'name=${result.name} plannedDate=${result.plannedDate}',
     );
+
+    if (!mounted) return;
+    await context.read<ToursService>().getToursForCurrentUser();
   }
 
   void _showAuthSheet(BuildContext context) {
@@ -147,7 +202,6 @@ class _MapPageState extends State<MapPage> {
               initialCameraPosition: _initial,
               onMapCreated: _onMapCreated,
               onStyleLoadedCallback: _onStyleLoaded,
-              onCameraIdle: _onCameraIdle,
               attributionButtonPosition: AttributionButtonPosition.topRight,
             ),
           ),
