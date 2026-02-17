@@ -1,6 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:touringbuddy_frontend/core/exceptions/unauthorized_user_exception.dart';
-import 'package:touringbuddy_frontend/models/tour.dart';
+import 'package:touringbuddy_frontend/features/tours/domain/tour.dart';
 import 'package:touringbuddy_frontend/supabase.dart';
 
 class ToursRepository {

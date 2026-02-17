@@ -5,9 +5,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:touringbuddy_frontend/components/error_snackbar.dart';
 import 'package:touringbuddy_frontend/core/exceptions/unauthenticated_user_exception.dart';
 import 'package:touringbuddy_frontend/core/logging/app_logger.dart';
-import 'package:touringbuddy_frontend/features/user/user_profile_repository.dart';
+import 'package:touringbuddy_frontend/features/user/data/user_profile_repository.dart';
+import 'package:touringbuddy_frontend/features/user/domain/user_profile.dart';
 import 'package:touringbuddy_frontend/main.dart';
-import 'package:touringbuddy_frontend/models/user_profile.dart';
 import 'package:touringbuddy_frontend/supabase.dart';
 
 class UserService extends ChangeNotifier {

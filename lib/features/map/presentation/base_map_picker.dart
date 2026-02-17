@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:touringbuddy_frontend/features/map/domain/base_map_style.dart';
 
-class StyleEntry {
-  final String label;
-  final String styleString;
-  const StyleEntry(this.label, this.styleString);
-}
-
-class LayerPickerFab extends StatelessWidget {
-  final List<StyleEntry> styles;
+class BaseMapPicker extends StatelessWidget {
+  final List<BaseMapStyle> styles;
   final int selectedIndex;
   final bool isSwitching;
   final ValueChanged<int> onSelected;
 
-  LayerPickerFab({
+  BaseMapPicker({
     super.key,
     required this.styles,
     required this.selectedIndex,

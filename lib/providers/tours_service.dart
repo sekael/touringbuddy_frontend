@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
-import 'package:touringbuddy_frontend/features/tours/tours_details_sheet.dart';
-import 'package:touringbuddy_frontend/features/tours/tours_repository.dart';
-import 'package:touringbuddy_frontend/models/tour.dart';
+import 'package:touringbuddy_frontend/features/tours/data/tours_repository.dart';
+import 'package:touringbuddy_frontend/features/tours/domain/tour.dart';
+import 'package:touringbuddy_frontend/features/tours/presentation/tours_details_sheet.dart';
 import 'package:touringbuddy_frontend/supabase.dart';
 import 'package:uuid/uuid.dart';
 

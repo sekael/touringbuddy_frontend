@@ -1,6 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:touringbuddy_frontend/core/logging/app_logger.dart';
-import 'package:touringbuddy_frontend/models/user_profile.dart';
+import 'package:touringbuddy_frontend/features/user/domain/user_profile.dart';
 import 'package:touringbuddy_frontend/supabase.dart';
 
 const _table = 'user_profile';

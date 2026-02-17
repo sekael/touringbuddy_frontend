@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:touringbuddy_frontend/components/error_snackbar.dart';
 import 'package:touringbuddy_frontend/core/logging/app_logger.dart';
+import 'package:touringbuddy_frontend/features/tours/domain/tour.dart';
 import 'package:touringbuddy_frontend/main.dart';
-import 'package:touringbuddy_frontend/models/tour.dart';
 
 class ToursSymbolLayer {
   MapLibreMapController? _controller;

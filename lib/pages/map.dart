@@ -5,13 +5,17 @@ import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:provider/provider.dart';
 import 'package:touringbuddy_frontend/components/crosshair.dart';
 import 'package:touringbuddy_frontend/core/logging/app_logger.dart';
-import 'package:touringbuddy_frontend/features/base_maps.dart';
-import 'package:touringbuddy_frontend/features/tours/tours_details_sheet.dart';
-import 'package:touringbuddy_frontend/features/tours/tours_symbol_layer.dart';
-import 'package:touringbuddy_frontend/features/user/user_profile_sheet.dart';
+import 'package:touringbuddy_frontend/features/map/domain/base_map_style.dart';
+import 'package:touringbuddy_frontend/features/map/presentation/base_map_picker.dart';
+import 'package:touringbuddy_frontend/features/tours/map/tours_symbol_layer.dart';
+import 'package:touringbuddy_frontend/features/tours/presentation/tours_details_sheet.dart';
+import 'package:touringbuddy_frontend/features/user/presentation/user_profile_sheet.dart';
 import 'package:touringbuddy_frontend/providers/tours_service.dart';
 import 'package:touringbuddy_frontend/providers/user_service.dart';
 
+// TODO: make goals clickable
+// TODO: attach contacts to goals
+// TODO: simplify MapPage
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
 
@@ -40,9 +44,9 @@ class _MapPageState extends State<MapPage> {
   static const String _swissTopoBaseStyle =
       'https://vectortiles.geo.admin.ch/styles/ch.swisstopo.basemap.vt/style.json';
   static const String _swissTopoFullStyle = 'assets/swisstopo_wmts_style.json';
-  late final List<StyleEntry> _styles = [
-    const StyleEntry('Swisstopo Base', _swissTopoBaseStyle),
-    const StyleEntry('Swisstopo Full Color', _swissTopoFullStyle),
+  late final List<BaseMapStyle> _styles = [
+    const BaseMapStyle('Swisstopo Base', _swissTopoBaseStyle),
+    const BaseMapStyle('Swisstopo Full Color', _swissTopoFullStyle),
   ];
 
   @override
@@ -256,7 +260,7 @@ class _MapPageState extends State<MapPage> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   if (!_isPickingLocation) ...[
-                    LayerPickerFab(
+                    BaseMapPicker(
                       styles: _styles,
                       selectedIndex: _currentIndex,
                       isSwitching: _isSwitchingLayer,
