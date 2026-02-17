@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:touringbuddy_frontend/core/config/theme.dart';
 import 'package:touringbuddy_frontend/pages/auth_gate.dart';
 import 'package:touringbuddy_frontend/providers/tours_service.dart';
 import 'package:touringbuddy_frontend/providers/user_service.dart';
@@ -30,9 +31,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Touring Buddy',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-      ),
+      theme: touringBuddyTheme,
       scaffoldMessengerKey: rootMessengerKey,
       navigatorKey: rootNavigatorKey,
       home: const AuthGate(),

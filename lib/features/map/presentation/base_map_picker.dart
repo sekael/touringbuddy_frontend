@@ -4,14 +4,12 @@ import 'package:touringbuddy_frontend/features/map/domain/base_map_style.dart';
 class BaseMapPicker extends StatelessWidget {
   final List<BaseMapStyle> styles;
   final int selectedIndex;
-  final bool isSwitching;
   final ValueChanged<int> onSelected;
 
   BaseMapPicker({
     super.key,
     required this.styles,
     required this.selectedIndex,
-    required this.isSwitching,
     required this.onSelected,
   });
 
@@ -23,7 +21,6 @@ class BaseMapPicker extends StatelessWidget {
 
     return PopupMenuButton<int>(
       key: _menuKey,
-      enabled: !isSwitching,
       color: theme.colorScheme.surface,
       tooltip: 'Base maps',
       position: PopupMenuPosition.over,
@@ -63,12 +60,8 @@ class BaseMapPicker extends StatelessWidget {
           shape: const CircleBorder(),
           elevation: 4, // Matches standard FAB elevation
         ),
-        onPressed: isSwitching
-            ? null
-            : () => _menuKey.currentState?.showButtonMenu(),
-        child: isSwitching
-            ? const CircularProgressIndicator()
-            : const Icon(Icons.layers_outlined),
+        onPressed: () => _menuKey.currentState?.showButtonMenu(),
+        child: const Icon(Icons.layers_outlined),
       ),
     );
   }

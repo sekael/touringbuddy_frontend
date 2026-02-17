@@ -18,7 +18,7 @@ class UserProfileSheet extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Text('Your Profile'),
+        const Text('Your Profile', style: TextStyle(fontSize: 18)),
         const SizedBox(height: 12),
         ListTile(
           leading: const Icon(Icons.badge_outlined),
