@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:touringbuddy_frontend/components/error_snackbar.dart';
+import 'package:touringbuddy_frontend/components/text/button.dart';
+import 'package:touringbuddy_frontend/core/config/theme.dart';
 import 'package:touringbuddy_frontend/core/logging/app_logger.dart';
 import 'package:touringbuddy_frontend/main.dart';
 import 'package:touringbuddy_frontend/pages/verify_otp.dart';
@@ -63,18 +65,18 @@ class _EmailEntryPageState extends State<EmailEntryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Sign in')),
+      appBar: AppBar(title: const Text('Sign In')),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(touringBuddySpacings.md),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const SizedBox(height: 12),
+                SizedBox(height: touringBuddySpacings.sm),
                 const Text('Enter your email and we’ll send you a login code.'),
-                const SizedBox(height: 16),
+                SizedBox(height: touringBuddySpacings.sm),
                 TextFormField(
                   controller: _emailCtrl,
                   keyboardType: TextInputType.emailAddress,
@@ -94,10 +96,12 @@ class _EmailEntryPageState extends State<EmailEntryPage> {
                   onFieldSubmitted: (_) =>
                       _submitting ? null : _sendLoginCode(),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: touringBuddySpacings.md),
                 ElevatedButton(
                   onPressed: _submitting ? null : _sendLoginCode,
-                  child: Text(_submitting ? 'Sending…' : 'Send login code'),
+                  child: ButtonText(
+                    buttonText: _submitting ? 'Sending…' : 'Send login code',
+                  ),
                 ),
               ],
             ),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:touringbuddy_frontend/components/error_snackbar.dart';
+import 'package:touringbuddy_frontend/components/text/button.dart';
+import 'package:touringbuddy_frontend/core/config/theme.dart';
 import 'package:touringbuddy_frontend/core/logging/app_logger.dart';
 import 'package:touringbuddy_frontend/main.dart';
 import 'package:touringbuddy_frontend/pages/auth_gate.dart';
@@ -93,15 +95,15 @@ class _OtpVerifyPageState extends State<OtpVerifyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Verify code')),
+      appBar: AppBar(title: const Text('Verify Code')),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(touringBuddySpacings.md),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text('Enter the code we sent to ${widget.email}.'),
-              const SizedBox(height: 16),
+              SizedBox(height: touringBuddySpacings.sm),
               TextField(
                 controller: _codeCtrl,
                 keyboardType: TextInputType.number,
@@ -114,14 +116,19 @@ class _OtpVerifyPageState extends State<OtpVerifyPage> {
                 ),
                 onSubmitted: (_) => _verify(),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: touringBuddySpacings.md),
               ElevatedButton(
                 onPressed: _validating ? null : _verify,
-                child: Text(_validating ? 'Verifying…' : 'Verify'),
+                child: ButtonText(
+                  buttonText: _validating ? 'Verifying…' : 'Verify',
+                ),
               ),
-              TextButton(
-                onPressed: _validating ? null : _resend,
-                child: const Text('Resend code'),
+              Padding(
+                padding: EdgeInsets.all(touringBuddySpacings.sm),
+                child: TextButton(
+                  onPressed: _validating ? null : _resend,
+                  child: const Text('Resend Code'),
+                ),
               ),
             ],
           ),

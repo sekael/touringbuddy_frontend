@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:provider/provider.dart';
 import 'package:touringbuddy_frontend/components/crosshair.dart';
+import 'package:touringbuddy_frontend/components/text/button.dart';
 import 'package:touringbuddy_frontend/core/logging/app_logger.dart';
 import 'package:touringbuddy_frontend/features/map/data/map_view_model.dart';
 import 'package:touringbuddy_frontend/features/tours/presentation/tours_details_sheet.dart';
@@ -37,7 +38,7 @@ class LocationPicker extends StatelessWidget {
               FloatingActionButton.extended(
                 heroTag: 'cancelGoal',
                 onPressed: () => viewModel.setPickingLocation(false),
-                label: const Text('Cancel'),
+                label: const ButtonText(buttonText: 'Cancel'),
                 icon: const Icon(Icons.close),
                 backgroundColor: Colors.white,
               ),
@@ -45,7 +46,7 @@ class LocationPicker extends StatelessWidget {
               FloatingActionButton.extended(
                 heroTag: 'confirmGoal',
                 onPressed: () => _handleConfirm(context),
-                label: const Text('Continue'),
+                label: const ButtonText(buttonText: 'Continue'),
                 icon: const Icon(Icons.check),
               ),
             ],

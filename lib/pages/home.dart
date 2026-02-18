@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:touringbuddy_frontend/components/body_text.dart';
-import 'package:touringbuddy_frontend/components/title_text.dart';
+import 'package:touringbuddy_frontend/components/text/body.dart';
+import 'package:touringbuddy_frontend/components/text/button.dart';
+import 'package:touringbuddy_frontend/components/text/title.dart';
+import 'package:touringbuddy_frontend/core/config/theme.dart';
 import 'package:touringbuddy_frontend/pages/email_entry.dart';
 
 class HomePage extends StatelessWidget {
@@ -30,7 +32,7 @@ class HomePage extends StatelessWidget {
                           'Please sign in to start using TouringBuddy, have fun!',
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: EdgeInsets.all(touringBuddySpacings.md),
                       child: ElevatedButton(
                         onPressed: () {
                           Navigator.of(context).push(
@@ -39,7 +41,7 @@ class HomePage extends StatelessWidget {
                             ),
                           );
                         },
-                        child: const Text('Sign In'),
+                        child: ButtonText(buttonText: 'Sign In'),
                       ),
                     ),
                   ],
