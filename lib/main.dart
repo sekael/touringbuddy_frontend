@@ -17,7 +17,17 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => UserService()..init()),
-        ChangeNotifierProvider(create: (_) => ToursService()),
+        ChangeNotifierProxyProvider<UserService, ToursService>(
+          create: (_) => ToursService(),
+          update: (context, userService, toursService) {
+            if (userService.isLoggedIn) {
+              toursService!.getToursForCurrentUser();
+            } else {
+              toursService!.clear();
+            }
+            return toursService;
+          },
+        ),
       ],
       child: MainApp(),
     ),

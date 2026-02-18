@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:touringbuddy_frontend/components/round_action_button.dart';
 import 'package:touringbuddy_frontend/core/config/theme.dart';
-import 'package:touringbuddy_frontend/features/map/data/map_view.dart';
+import 'package:touringbuddy_frontend/features/map/data/map_view_model.dart';
 import 'package:touringbuddy_frontend/features/map/data/swisstopo_styles.dart';
 import 'package:touringbuddy_frontend/features/map/presentation/base_map_picker.dart';
 import 'package:touringbuddy_frontend/features/user/presentation/user_profile_sheet.dart';

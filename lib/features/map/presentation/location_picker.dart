@@ -3,7 +3,7 @@ import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:provider/provider.dart';
 import 'package:touringbuddy_frontend/components/crosshair.dart';
 import 'package:touringbuddy_frontend/core/logging/app_logger.dart';
-import 'package:touringbuddy_frontend/features/map/data/map_view.dart';
+import 'package:touringbuddy_frontend/features/map/data/map_view_model.dart';
 import 'package:touringbuddy_frontend/features/tours/presentation/tours_details_sheet.dart';
 import 'package:touringbuddy_frontend/providers/tours_service.dart';
 

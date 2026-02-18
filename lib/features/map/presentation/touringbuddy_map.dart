@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:provider/provider.dart';
-import 'package:touringbuddy_frontend/features/map/data/map_view.dart';
+import 'package:touringbuddy_frontend/features/map/data/map_view_model.dart';
 import 'package:touringbuddy_frontend/features/map/data/swisstopo_styles.dart';
 import 'package:touringbuddy_frontend/features/tours/map/tours_symbol_layer.dart';
 import 'package:touringbuddy_frontend/providers/tours_service.dart';
@@ -15,6 +15,7 @@ class TouringBuddyMap extends StatefulWidget {
 
 class _TouringBuddyMapState extends State<TouringBuddyMap> {
   late final ToursSymbolLayer _toursLayer;
+  MapViewModel? _viewModel;
 
   @override
   void initState() {
@@ -23,13 +24,21 @@ class _TouringBuddyMapState extends State<TouringBuddyMap> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Cache reference to MapViewModel for cleanup later
+    _viewModel = context.read<MapViewModel>();
+  }
+
+  @override
   void dispose() {
-    context.read<MapViewModel>().detachController();
+    _viewModel?.detachController();
+    _toursLayer.detach();
     super.dispose();
   }
 
   void _onMapCreated(MapLibreMapController controller) {
-    context.read<MapViewModel>().attachController(controller);
+    _viewModel?.attachController(controller);
     _toursLayer.attach(controller);
   }
 
@@ -44,7 +53,13 @@ class _TouringBuddyMapState extends State<TouringBuddyMap> {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.watch<MapViewModel>();
+    final currentStyleIndex = context.select<MapViewModel, int>(
+      (vm) => vm.currentStyleIndex,
+    );
+
+    // Reactively update tours
+    final tours = context.watch<ToursService>().tours;
+    _toursLayer.setTours(tours);
 
     return MouseRegion(
       cursor: SystemMouseCursors.basic,
@@ -53,8 +68,7 @@ class _TouringBuddyMapState extends State<TouringBuddyMap> {
           target: LatLng(46.8, 8.2),
           zoom: 8,
         ),
-        styleString:
-            SwisstopoStyles.all[viewModel.currentStyleIndex].styleString,
+        styleString: SwisstopoStyles.all[currentStyleIndex].styleString,
         onMapCreated: _onMapCreated,
         onStyleLoadedCallback: _onStyleLoaded,
         trackCameraPosition: true,
