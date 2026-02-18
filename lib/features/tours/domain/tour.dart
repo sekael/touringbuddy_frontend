@@ -22,7 +22,10 @@ class Tour {
       plannedDate: json['planned_date'] != null
           ? DateTime.parse(json['planned_date'])
           : null,
-      goal: parseGeography(json['goal']),
+      goal: LatLng(
+        (json['lat'] as num).toDouble(),
+        (json['lon'] as num).toDouble(),
+      ),
       name: json['name'],
     );
   }
@@ -37,19 +40,18 @@ class Tour {
     };
   }
 
-  static LatLng parseGeography(dynamic goal) {
-    if (goal is Map && goal.containsKey('coordinates')) {
-      // Handle GeoJSON format
-      final coords = goal['coordinates'] as List;
-      return LatLng(coords[1] as double, coords[0] as double);
-    } else if (goal is String) {
-      // Handle WKT format "POINT(8.2 46.8)"
-      final values = goal
-          .replaceAll('POINT(', '')
-          .replaceAll(')', '')
-          .split(' ');
-      return LatLng(double.parse(values[1]), double.parse(values[0]));
-    }
-    throw Exception('Unknown geography format');
+  Map<String, dynamic> toGeoJsonFeature() {
+    return {
+      'type': 'Feature',
+      'id': id,
+      'properties': {
+        'name': name ?? '',
+        'planned_date': plannedDate?.toIso8601String() ?? '',
+      },
+      'geometry': {
+        'type': 'Point',
+        'coordinates': [goal.longitude, goal.latitude],
+      },
+    };
   }
 }

@@ -1,22 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:touringbuddy_frontend/features/map/domain/base_map_style.dart';
 
-class StyleEntry {
-  final String label;
-  final String styleString;
-  const StyleEntry(this.label, this.styleString);
-}
-
-class LayerPickerFab extends StatelessWidget {
-  final List<StyleEntry> styles;
+class BaseMapPicker extends StatelessWidget {
+  final List<BaseMapStyle> styles;
   final int selectedIndex;
-  final bool isSwitching;
   final ValueChanged<int> onSelected;
 
-  LayerPickerFab({
+  BaseMapPicker({
     super.key,
     required this.styles,
     required this.selectedIndex,
-    required this.isSwitching,
     required this.onSelected,
   });
 
@@ -28,9 +21,8 @@ class LayerPickerFab extends StatelessWidget {
 
     return PopupMenuButton<int>(
       key: _menuKey,
-      enabled: !isSwitching,
       color: theme.colorScheme.surface,
-      tooltip: 'Map layers',
+      tooltip: 'Base maps',
       position: PopupMenuPosition.over,
       onSelected: onSelected,
       itemBuilder: (context) {
@@ -68,12 +60,8 @@ class LayerPickerFab extends StatelessWidget {
           shape: const CircleBorder(),
           elevation: 4, // Matches standard FAB elevation
         ),
-        onPressed: isSwitching
-            ? null
-            : () => _menuKey.currentState?.showButtonMenu(),
-        child: isSwitching
-            ? const CircularProgressIndicator()
-            : const Icon(Icons.layers_outlined),
+        onPressed: () => _menuKey.currentState?.showButtonMenu(),
+        child: const Icon(Icons.layers_outlined),
       ),
     );
   }

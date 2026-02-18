@@ -1,6 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:touringbuddy_frontend/core/logging/app_logger.dart';
-import 'package:touringbuddy_frontend/features/user/user_profile_domain.dart';
+import 'package:touringbuddy_frontend/features/user/domain/user_profile.dart';
 import 'package:touringbuddy_frontend/supabase.dart';
 
 const _table = 'user_profile';
@@ -23,7 +23,6 @@ class UserProfileRepository {
   /// Update the current user with new values.
   /// Throws [Exception] if the current user is not authenticated or trying to update a different user.
   /// Throws [PostgresException] if there is an issue updating the user in the database.
-  @override
   Future<void> updateMyUser(UserProfileData updatedUser) async {
     User myUser = getCurrentUser();
 
@@ -38,7 +37,6 @@ class UserProfileRepository {
     await _client.from(_table).update(updatedUser.toMap()).eq('id', userId);
   }
 
-  @override
   Future<void> upsertMyUser(UserProfileData updatedUser) async {
     User myUser = getCurrentUser();
 

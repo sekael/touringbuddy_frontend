@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:touringbuddy_frontend/features/user/user_profile_repository.dart';
-import 'package:touringbuddy_frontend/features/user/user_service.dart';
-import 'package:touringbuddy_frontend/pages/map.dart';
+import 'package:touringbuddy_frontend/core/config/theme.dart';
+import 'package:touringbuddy_frontend/pages/auth_gate.dart';
+import 'package:touringbuddy_frontend/providers/tours_service.dart';
+import 'package:touringbuddy_frontend/providers/user_service.dart';
 import 'package:touringbuddy_frontend/supabase.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -15,10 +16,17 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) =>
-              UserService(userProfileRepository: UserProfileRepository())
-                ..init(),
+        ChangeNotifierProvider(create: (_) => UserService()..init()),
+        ChangeNotifierProxyProvider<UserService, ToursService>(
+          create: (_) => ToursService(),
+          update: (context, userService, toursService) {
+            if (userService.isLoggedIn) {
+              toursService!.getToursForCurrentUser();
+            } else {
+              toursService!.clear();
+            }
+            return toursService;
+          },
         ),
       ],
       child: MainApp(),
@@ -33,8 +41,10 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Touring Buddy',
-      theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.blue)),
-      home: MapPage(),
+      theme: touringBuddyTheme,
+      scaffoldMessengerKey: rootMessengerKey,
+      navigatorKey: rootNavigatorKey,
+      home: const AuthGate(),
     );
   }
 }
