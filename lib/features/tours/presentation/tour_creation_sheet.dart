@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
 
-class TourDetailsSheet extends StatefulWidget {
+class TourCreationSheet extends StatefulWidget {
   final LatLng goal;
 
-  const TourDetailsSheet({super.key, required this.goal});
+  const TourCreationSheet({super.key, required this.goal});
 
   @override
-  State<TourDetailsSheet> createState() => _TourDetailsSheetState();
+  State<TourCreationSheet> createState() => _TourCreationSheetState();
 }
 
-class _TourDetailsSheetState extends State<TourDetailsSheet> {
+class _TourCreationSheetState extends State<TourCreationSheet> {
   final _nameCtrl = TextEditingController();
   DateTime? _plannedDate;
 
