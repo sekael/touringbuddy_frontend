@@ -68,7 +68,15 @@ class LocationPicker extends StatelessWidget {
     final result = await showModalBottomSheet<TourDraft>(
       context: context,
       isScrollControlled: true,
-      builder: (context) => TourCreationSheet(goal: point),
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        padding: EdgeInsets.all(20),
+        child: TourCreationSheet(goal: point),
+      ),
     );
 
     if (result != null && context.mounted) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:provider/provider.dart';
+import 'package:touringbuddy_frontend/core/config/theme.dart';
 import 'package:touringbuddy_frontend/core/logging/app_logger.dart';
 import 'package:touringbuddy_frontend/features/map/data/map_view_model.dart';
 import 'package:touringbuddy_frontend/features/map/data/swisstopo_styles.dart';
@@ -60,7 +61,14 @@ class _TouringBuddyMapState extends State<TouringBuddyMap> {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => TourInfoSheet(tour: tour),
+      builder: (context) => Container(
+        decoration: BoxDecoration(
+          color: touringBuddyTheme.colorScheme.surface,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        padding: EdgeInsets.all(20),
+        child: TourInfoSheet(tour: tour),
+      ),
     ).then((_) {
       viewModel.resetCameraView();
     });
