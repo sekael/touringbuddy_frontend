@@ -61,6 +61,7 @@ class _TouringBuddyMapState extends State<TouringBuddyMap> {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
+      barrierColor: Colors.transparent,
       builder: (context) => Container(
         decoration: BoxDecoration(
           color: touringBuddyTheme.colorScheme.surface,
