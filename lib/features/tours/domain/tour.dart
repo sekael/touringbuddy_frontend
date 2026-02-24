@@ -6,6 +6,7 @@ class Tour {
   final DateTime? plannedDate;
   final LatLng goal;
   final String? name;
+  final List<String> partnerIds;
 
   Tour({
     required this.id,
@@ -13,8 +14,10 @@ class Tour {
     this.plannedDate,
     required this.goal,
     this.name,
+    this.partnerIds = const [],
   });
 
+  // TODO: update view to support partner IDs
   factory Tour.fromJson(Map<String, dynamic> json) {
     return Tour(
       id: json['id'],

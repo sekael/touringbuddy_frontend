@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 
 @immutable
 class SpacingTokens extends ThemeExtension<SpacingTokens> {
-  final double xxs, xs, sm, md, lg, xl;
+  final double xxs, xs, sm, md, lg, xl, xxl;
   const SpacingTokens({
     this.xxs = 4,
     this.xs = 8,
     this.sm = 12,
     this.md = 16,
-    this.lg = 24,
-    this.xl = 32,
+    this.lg = 20,
+    this.xl = 24,
+    this.xxl = 32,
   });
 
   @override
