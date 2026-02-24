@@ -5,7 +5,7 @@ import 'package:touringbuddy_frontend/components/crosshair.dart';
 import 'package:touringbuddy_frontend/components/text/button.dart';
 import 'package:touringbuddy_frontend/core/logging/app_logger.dart';
 import 'package:touringbuddy_frontend/features/map/data/map_view_model.dart';
-import 'package:touringbuddy_frontend/features/tours/presentation/tours_details_sheet.dart';
+import 'package:touringbuddy_frontend/features/tours/presentation/tour_creation_sheet.dart';
 import 'package:touringbuddy_frontend/providers/tours_service.dart';
 
 class LocationPicker extends StatelessWidget {
@@ -68,7 +68,15 @@ class LocationPicker extends StatelessWidget {
     final result = await showModalBottomSheet<TourDraft>(
       context: context,
       isScrollControlled: true,
-      builder: (context) => TourDetailsSheet(goal: point),
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        padding: EdgeInsets.all(20),
+        child: TourCreationSheet(goal: point),
+      ),
     );
 
     if (result != null && context.mounted) {
