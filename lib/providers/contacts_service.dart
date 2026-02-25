@@ -27,14 +27,26 @@ class ContactsService extends ChangeNotifier {
     }
   }
 
+  void clear() {
+    _contacts = [];
+    notifyListeners();
+  }
+
   Future<void> addContact(String first, String? last, String? display) async {
     final userId = getCurrentUser().id;
+    // Normalize inputs to be safe
+    final trimmedFirst = first.trim();
+    final trimmedLast = (last?.trim().isEmpty ?? true) ? null : last!.trim();
+    final trimmedDisplay = (display?.trim().isEmpty ?? true)
+        ? null
+        : display!.trim();
+
     final newContact = Contact(
       id: '', // Supabase generates this
       userId: userId,
-      firstName: first,
-      lastName: last,
-      displayName: display ?? first,
+      firstName: trimmedFirst,
+      lastName: trimmedLast,
+      displayName: trimmedDisplay,
     );
 
     final created = await _repository.createContact(newContact);

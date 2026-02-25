@@ -76,9 +76,9 @@ class _ContactCreationSheetState extends State<ContactCreationSheet> {
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   await context.read<ContactsService>().addContact(
-                    _firstCtrl.text,
-                    _lastCtrl.text,
-                    _displayCtrl.text,
+                    _firstCtrl.text.trim(),
+                    _lastCtrl.text.trim(),
+                    _displayCtrl.text.trim(),
                   );
                   if (context.mounted) {
                     rootNavigatorKey.currentState?.pop(context);

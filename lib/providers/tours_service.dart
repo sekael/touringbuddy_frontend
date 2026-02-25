@@ -29,7 +29,7 @@ class ToursService extends ChangeNotifier {
     );
 
     try {
-      final tourId = _repository.insertNewTour(
+      final tourId = await _repository.insertNewTour(
         newTour,
         draft.selectedPartnerIds,
       );

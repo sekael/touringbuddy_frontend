@@ -17,8 +17,8 @@ class Tour {
     this.partnerIds = const [],
   });
 
-  // TODO: update view to support partner IDs
   factory Tour.fromJson(Map<String, dynamic> json) {
+    final List<dynamic> rawPartnerIds = json['partner_ids'] ?? [];
     return Tour(
       id: json['id'],
       userId: json['user_id'],
@@ -30,6 +30,7 @@ class Tour {
         (json['lon'] as num).toDouble(),
       ),
       name: json['name'],
+      partnerIds: rawPartnerIds.map((e) => e.toString()).toList(),
     );
   }
 

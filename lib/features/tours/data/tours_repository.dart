@@ -16,7 +16,6 @@ class ToursRepository {
     }
   }
 
-  // TODO: Create RPC in Supabase
   Future<String> insertNewTour(Tour tour, List<String> partnerIds) async {
     return await _client.rpc(
       'create_tour_with_partners',
@@ -36,7 +35,7 @@ class ToursRepository {
 
     final rows = await _client
         .from(_viewTable)
-        .select('id, user_id, planned_date, name, lon, lat')
+        .select('id, user_id, planned_date, name, lon, lat, partner_ids')
         .eq('user_id', userId)
         .order('name');
 

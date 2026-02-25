@@ -3,6 +3,7 @@ import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:provider/provider.dart';
 import 'package:touringbuddy_frontend/components/text/name_form_field.dart';
 import 'package:touringbuddy_frontend/core/config/theme.dart';
+import 'package:touringbuddy_frontend/features/contacts/presentation/contact_chip.dart';
 import 'package:touringbuddy_frontend/providers/contacts_service.dart';
 
 class TourCreationSheet extends StatefulWidget {
@@ -76,7 +77,9 @@ class _TourCreationSheetState extends State<TourCreationSheet> {
         ),
         child: Form(
           key: _formKey,
-          child: ListView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Center(
                 child: Container(
@@ -133,7 +136,7 @@ class _TourCreationSheetState extends State<TourCreationSheet> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Text(
-                    'Add some contacts to go touring with first',
+                    'Add some buddies to go touring with',
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: theme.colorScheme.error,
                     ),
@@ -144,10 +147,10 @@ class _TourCreationSheetState extends State<TourCreationSheet> {
                   spacing: touringBuddySpacings.xs,
                   children: contactsService.contacts.map((contact) {
                     final isSelected = _selectedPartnerIds.contains(contact.id);
-                    return FilterChip(
-                      label: Text(contact.displayName ?? contact.firstName),
-                      selected: isSelected,
-                      onSelected: (selected) {
+                    return ContactChip(
+                      contact: contact,
+                      isSelected: isSelected,
+                      onSelectedCallback: (selected) {
                         setState(() {
                           if (selected) {
                             _selectedPartnerIds.add(contact.id);
