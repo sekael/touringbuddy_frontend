@@ -1,4 +1,4 @@
-name: Build Web Application Create Artifact
+name: Build and Deploy Web Application
 
 on:
   workflow_call:
