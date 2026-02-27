@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.0](https://github.com/sekael/touringbuddy_frontend/compare/v1.0.0...v1.1.0) (2026-02-27)
+
+
+### Features
+
+* add feedback button ([#17](https://github.com/sekael/touringbuddy_frontend/issues/17)) ([d7f32e2](https://github.com/sekael/touringbuddy_frontend/commit/d7f32e2c7bdda61444fe5a3b2e3ef8d7f8fcca04))
+* improve continuous deployment ([#15](https://github.com/sekael/touringbuddy_frontend/issues/15)) ([855f8fd](https://github.com/sekael/touringbuddy_frontend/commit/855f8fd95786827c8d9edcedfcd9fb9448a6de1e))
+* improve feedback possibilities ([#19](https://github.com/sekael/touringbuddy_frontend/issues/19)) ([6f7019b](https://github.com/sekael/touringbuddy_frontend/commit/6f7019baa7b2428bfd974066f42394dc97400ab5))
+
 ## 1.0.0 (2026-02-27)
 
 
