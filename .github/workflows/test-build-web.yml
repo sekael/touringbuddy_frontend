@@ -1,16 +1,18 @@
-name: Build Flutter Web
+name: Test Flutter Web Build
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
 
 jobs:
-  build-and-test:
-    name: Build & Quality Check
+  test-build:
+    name: Test Web Build
     runs-on: ubuntu-latest
 
     steps:
@@ -37,10 +39,3 @@ jobs:
 
       - name: Build Web
         run: flutter build web --release --base-href "/${{ github.event.repository.name }}/"
-
-      - name: Upload Production Artifact
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: actions/upload-artifact@v4
-        with:
-          name: tourenbuddy-web-build
-          path: build/web
