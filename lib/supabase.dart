@@ -12,6 +12,9 @@ Future<void> initializeSupabase() async {
     throw Exception('Missing value for SUPABASE_URL');
   } else if (supabaseAnonKey == null) {
     throw Exception('Missing value for SUPABASE_ANON_KEY');
+  } else if (supabaseUrl.contains('placeholder') ||
+      supabaseAnonKey.contains('placeholder')) {
+    logger.w('Running with placeholder environment variables for Supabase');
   }
 
   logger.i('Initializing Supabase client with URL = $supabaseUrl');

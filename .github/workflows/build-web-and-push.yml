@@ -1,0 +1,71 @@
+name: Build Web Application Create Artifact
+
+on:
+  workflow_call:
+    inputs:
+      image_tag:
+        required: true
+        type: string
+      version:
+        required: false
+        type: string
+        default: ""
+      majorVersion:
+        required: false
+        type: string
+        default: ""
+      minorVersion:
+        required: false
+        type: string
+        default: ""
+
+permissions:
+  actions: write
+  contents: write
+  pull-requests: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Tag Major and Minor Versions
+        if: ${{ inputs.majorVersion != '' && inputs.minorVersion != '' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -d v${{ inputs.majorVersion }} || true
+          git tag -d v${{ inputs.majorVersion }}.${{ inputs.minorVersion }} || true
+          git push origin :v${{ inputs.majorVersion }} || true
+          git push origin :v${{ inputs.majorVersion }}.${{ inputs.minorVersion }} || true
+          git tag -a v${{ inputs.majorVersion }} -m "Release v${{ inputs.majorVersion }}"
+          git tag -a v${{ inputs.majorVersion }}.${{ inputs.minorVersion }} -m "Release v${{ inputs.majorVersion }}.${{ inputs.minorVersion }}"
+          git push origin v${{ inputs.majorVersion }}
+          git push origin v${{ inputs.majorVersion }}.${{ inputs.minorVersion }}
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Create Env File
+        run: |
+          mkdir -p config
+          echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" > config/supabase.env
+          echo "SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}" >> config/supabase.env
+
+      - name: Build Web
+        run: flutter build web --release --base-href "/${{ github.event.repository.name }}/"
+
+      # Here you can add your deployment step (e.g., to GitHub Pages or S3)
+      - name: Upload Production Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: touringbuddy-web:${{ inputs.image_tag }}
+          path: build/web

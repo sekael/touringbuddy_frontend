@@ -1,12 +1,14 @@
 name: Analyze and Test Code
 
 on:
-  push:
-    branches: 
-    - "**"
   pull_request:
-    branches: 
-    - main
+    branches:
+      - main
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
 
 jobs:
   analyze-and-test:

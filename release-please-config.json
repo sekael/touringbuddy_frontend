@@ -1,0 +1,20 @@
+{
+  "packages": {
+    ".": {
+      "release-type": "simple",
+      "package-name": "touringbuddy_frontend",
+      "extra-files": [
+        {
+          "type": "yaml",
+          "path": "pubspec.yaml",
+          "jsonpath": "$.version"
+        }
+      ]
+    }
+  },
+  "plugins": [
+    {
+      "type": "sentence-case"
+    }
+  ]
+}
