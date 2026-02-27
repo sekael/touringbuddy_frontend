@@ -3,9 +3,10 @@ name: Build Flutter Web
 on:
   push:
     branches:
-      - "**"
+      - main
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   build-and-test:
@@ -40,5 +41,5 @@ jobs:
       - name: Upload Production Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: web-build
+          name: tourenbuddy-web-build
           path: build/web
