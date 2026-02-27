@@ -67,5 +67,5 @@ jobs:
       - name: Upload Production Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: touringbuddy-web-${{ needs.release-please.outputs.tag_name }}
+          name: touringbuddy-web:${{ inputs.image_tag }}
           path: build/web
