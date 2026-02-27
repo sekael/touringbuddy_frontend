@@ -10,47 +10,30 @@ permissions:
   pull-requests: write
 
 jobs:
-  release-please:
+  release:
     runs-on: ubuntu-latest
     outputs:
-      release_created: ${{ steps.release.outputs.release_created }}
       tag_name: ${{ steps.release.outputs.tag_name }}
+      version: ${{ steps.release.outputs.version }}
+      major: ${{ steps.release.outputs.major }}
+      minor: ${{ steps.release.outputs.minor }}
+      release_created: ${{ steps.release.outputs.release_created}}
     steps:
       - uses: googleapis/release-please-action@v4
         id: release
         with:
+          release-type: simple
+          target-branch: ${{ github.ref_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
   # This job only runs when the release-please PR is merged and a tag is created
-  build-and-deploy:
-    needs: release-please
-    if: ${{ needs.release-please.outputs.release_created }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          cache: true
-
-      - name: Install Dependencies
-        run: flutter pub get
-
-      - name: Create Env File
-        run: |
-          mkdir -p config
-          echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" > config/supabase.env
-          echo "SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}" >> config/supabase.env
-
-      - name: Build Web
-        run: flutter build web --release --base-href "/${{ github.event.repository.name }}/"
-
-      # Here you can add your deployment step (e.g., to GitHub Pages or S3)
-      - name: Upload Production Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-build-${{ needs.release-please.outputs.tag_name }}
-          path: build/web
+  build-and-push:
+    needs: release
+    uses: ./.github/workflows/build-web-and-push.yml
+    secrets: inherit
+    if: ${{ needs.release.outputs.release_created }}
+    with:
+      image_tag: ${{ needs.release.outputs.tag_name }}
+      version: ${{ needs.release.outputs.version }}
+      majorVersion: ${{ needs.release.outputs.major }}
+      minorVersion: ${{ needs.release.outputs.minor }}
