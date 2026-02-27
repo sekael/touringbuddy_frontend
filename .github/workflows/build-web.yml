@@ -25,6 +25,12 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
+      - name: Create Supabase Environment File From Secrets
+        run: |
+          mkdir -p config
+          echo "SUPABASE_URL=${{ secrets.SUPABASE_URL || 'https://placeholder.supabase.co' }}" > config/supabase.env
+          echo "SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY || 'placeholder' }}" >> config/supabase.envV
+
       - name: Analyze Code
         run: flutter analyze
 
