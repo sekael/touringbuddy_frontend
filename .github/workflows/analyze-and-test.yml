@@ -1,12 +1,9 @@
 name: Analyze and Test Code
 
 on:
-  push:
-    branches: 
-    - "**"
   pull_request:
-    branches: 
-    - main
+    branches:
+      - main
 
 jobs:
   analyze-and-test:
