@@ -21,9 +21,6 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   late final ToursMarkerLayer _toursSymbolLayer;
 
-  final String _githubUsername = 'sekael';
-  final String _repoName = 'touringbuddy_frontend';
-
   @override
   void initState() {
     super.initState();
