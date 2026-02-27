@@ -2,36 +2,24 @@ name: Build Flutter Web
 
 on:
   push:
-    branches: 
-    - '**'
+    branches:
+      - "**"
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build-and-test:
     name: Build & Quality Check
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # 1. Extract SDK version from pubspec.yaml
-      # We use 'grep' to find the line and 'sed' to clean up the symbols (^, >, <, etc.)
-      - name: Get Flutter SDK Version
-        id: flutter-version
-        run: |
-          SDK_VERSION=$(grep 'sdk:' pubspec.yaml | head -n 1 | awk '{print $2}' | sed "s/['\"^>=<]//g")
-          echo "version=$SDK_VERSION" >> $GITHUB_OUTPUT
-          echo "Detected SDK Version: $SDK_VERSION"
-
-      # 2. Use the extracted version in the setup action
-      # We reference the output from the previous step using steps.flutter-version.outputs.version
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: ${{ steps.flutter-version.outputs.version }}
-          channel: 'stable'
+          flutter-version-file: pubspec.yaml
           cache: true
 
       - name: Install Dependencies
