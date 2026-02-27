@@ -5,11 +5,10 @@
       "package-name": "touringbuddy_frontend",
       "extra-files": [
         {
-          "type": "json",
-          "path": "package.json",
+          "type": "yaml",
+          "path": "pubspec.yaml",
           "jsonpath": "$.version"
-        },
-        "pubspec.yaml"
+        }
       ]
     }
   },
