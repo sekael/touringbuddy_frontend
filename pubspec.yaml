@@ -4,7 +4,9 @@ description: "The frontend of the touring planning app TourenBuddy"
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
+# x-release-please-start-version
 version: 0.1.0
+# x-release-please-end
 
 environment:
   sdk: ^3.10.8
