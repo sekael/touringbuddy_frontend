@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
+import 'package:provider/provider.dart';
+import 'package:touringbuddy_frontend/components/text/name_form_field.dart';
+import 'package:touringbuddy_frontend/core/config/theme.dart';
+import 'package:touringbuddy_frontend/features/contacts/presentation/contact_chip.dart';
+import 'package:touringbuddy_frontend/providers/contacts_service.dart';
 
 class TourCreationSheet extends StatefulWidget {
   final LatLng goal;
@@ -11,8 +16,10 @@ class TourCreationSheet extends StatefulWidget {
 }
 
 class _TourCreationSheetState extends State<TourCreationSheet> {
+  final _formKey = GlobalKey<FormState>();
   final _nameCtrl = TextEditingController();
   DateTime? _plannedDate;
+  final List<String> _selectedPartnerIds = [];
 
   @override
   void dispose() {
@@ -38,14 +45,20 @@ class _TourCreationSheetState extends State<TourCreationSheet> {
   }
 
   void _submit() {
+    if (!_formKey.currentState!.validate()) return;
     final name = _nameCtrl.text.trim();
     Navigator.of(context).pop(
-      TourDraft(name: name.isEmpty ? null : name, plannedDate: _plannedDate),
+      TourDraft(
+        name: name.isEmpty ? null : name,
+        plannedDate: _plannedDate,
+        selectedPartnerIds: _selectedPartnerIds,
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final contactsService = context.watch<ContactsService>();
     final theme = Theme.of(context);
     final dateText = _plannedDate == null
         ? 'No date'
@@ -55,96 +68,122 @@ class _TourCreationSheetState extends State<TourCreationSheet> {
       top: false,
       child: Padding(
         padding: EdgeInsets.only(
-          left: 16,
-          right: 16,
-          top: 12,
-          // keyboard-aware padding
-          bottom: 16 + MediaQuery.of(context).viewInsets.bottom,
+          left: touringBuddySpacings.lg,
+          right: touringBuddySpacings.lg,
+          top: touringBuddySpacings.lg,
+          bottom:
+              MediaQuery.of(context).viewInsets.bottom +
+              touringBuddySpacings.lg,
         ),
-        child: ListView(
-          children: [
-            Center(
-              child: Container(
-                width: 44,
-                height: 4,
-                margin: const EdgeInsets.only(bottom: 12),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.outlineVariant,
-                  borderRadius: BorderRadius.circular(999),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Center(
+                child: Container(
+                  width: 44,
+                  height: 4,
+                  margin: EdgeInsets.only(bottom: touringBuddySpacings.sm),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.outlineVariant,
+                    borderRadius: BorderRadius.circular(999),
+                  ),
                 ),
               ),
-            ),
-
-            Text('New tour', style: theme.textTheme.titleLarge),
-            const SizedBox(height: 4),
-            Text(
-              'Goal: ${widget.goal.latitude.toStringAsFixed(5)}, '
-              '${widget.goal.longitude.toStringAsFixed(5)}',
-              style: theme.textTheme.bodySmall,
-            ),
-            const SizedBox(height: 16),
-
-            TextField(
-              controller: _nameCtrl,
-              textInputAction: TextInputAction.done,
-              decoration: const InputDecoration(
-                labelText: 'Tour name (optional)',
-                hintText: 'e.g., “Weekend ride”',
-                border: OutlineInputBorder(),
+              Text('New tour', style: theme.textTheme.titleLarge),
+              SizedBox(height: touringBuddySpacings.xxs),
+              Text(
+                'Goal: ${widget.goal.latitude.toStringAsFixed(5)}, '
+                '${widget.goal.longitude.toStringAsFixed(5)}',
+                style: theme.textTheme.bodySmall,
               ),
-              onSubmitted: (_) => _submit(),
-            ),
-            const SizedBox(height: 12),
-
-            InkWell(
-              onTap: _pickDate,
-              borderRadius: BorderRadius.circular(12),
-              child: InputDecorator(
-                decoration: const InputDecoration(
-                  labelText: 'Planned date (optional)',
-                  border: OutlineInputBorder(),
-                ),
-                child: Row(
-                  children: [
-                    Expanded(child: Text(dateText)),
-                    Icon(
-                      Icons.calendar_month,
-                      color: theme.colorScheme.primary,
-                    ),
-                    if (_plannedDate != null) ...[
-                      const SizedBox(width: 8),
-                      IconButton(
-                        tooltip: 'Clear date',
-                        onPressed: () => setState(() => _plannedDate = null),
-                        icon: const Icon(Icons.clear),
+              SizedBox(height: touringBuddySpacings.md),
+              NameFormField(controller: _nameCtrl, labelText: 'Tour Name'),
+              SizedBox(height: touringBuddySpacings.sm),
+              InkWell(
+                onTap: _pickDate,
+                borderRadius: BorderRadius.circular(12),
+                child: InputDecorator(
+                  decoration: const InputDecoration(
+                    labelText: 'Planned date (optional)',
+                    border: OutlineInputBorder(),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(child: Text(dateText)),
+                      Icon(
+                        Icons.calendar_month,
+                        color: theme.colorScheme.primary,
                       ),
+                      if (_plannedDate != null) ...[
+                        SizedBox(height: touringBuddySpacings.xs),
+                        IconButton(
+                          tooltip: 'Clear date',
+                          onPressed: () => setState(() => _plannedDate = null),
+                          icon: const Icon(Icons.clear),
+                        ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
               ),
-            ),
-
-            const SizedBox(height: 20),
-
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () => Navigator.of(context).pop(null),
-                    child: const Text('Cancel'),
+              SizedBox(height: touringBuddySpacings.lg),
+              Text('Touring Partners', style: theme.textTheme.titleMedium),
+              SizedBox(height: touringBuddySpacings.xs),
+              if (contactsService.contacts.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Text(
+                    'Add some buddies to go touring with',
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.error,
+                    ),
                   ),
+                )
+              else
+                Wrap(
+                  spacing: touringBuddySpacings.xs,
+                  children: contactsService.contacts.map((contact) {
+                    final isSelected = _selectedPartnerIds.contains(contact.id);
+                    return ContactChip(
+                      contact: contact,
+                      isSelected: isSelected,
+                      onSelectedCallback: (selected) {
+                        setState(() {
+                          if (selected) {
+                            _selectedPartnerIds.add(contact.id);
+                          } else {
+                            _selectedPartnerIds.remove(contact.id);
+                          }
+                        });
+                      },
+                    );
+                  }).toList(),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: FilledButton.icon(
-                    onPressed: _submit,
-                    icon: const Icon(Icons.save),
-                    label: const Text('Save'),
+              SizedBox(height: touringBuddySpacings.lg),
+              Row(
+                spacing: touringBuddySpacings.sm,
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.of(context).pop(null),
+                      child: const Text('Cancel'),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                  SizedBox(height: touringBuddySpacings.sm),
+                  Expanded(
+                    child: FilledButton.icon(
+                      onPressed: _submit,
+                      icon: const Icon(Icons.save),
+                      label: const Text('Save'),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -154,6 +193,7 @@ class _TourCreationSheetState extends State<TourCreationSheet> {
 class TourDraft {
   final String? name;
   final DateTime? plannedDate;
+  final List<String> selectedPartnerIds;
 
-  TourDraft({this.name, this.plannedDate});
+  TourDraft({this.name, this.plannedDate, this.selectedPartnerIds = const []});
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:touringbuddy_frontend/components/round_action_button.dart';
 import 'package:touringbuddy_frontend/core/config/theme.dart';
+import 'package:touringbuddy_frontend/features/contacts/presentation/contact_creation_sheet.dart';
 import 'package:touringbuddy_frontend/features/map/data/map_view_model.dart';
 import 'package:touringbuddy_frontend/features/map/data/swisstopo_styles.dart';
 import 'package:touringbuddy_frontend/features/map/presentation/base_map_picker.dart';
@@ -28,28 +29,30 @@ class MapActionOverlay extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            // 1. Style Picker
             BaseMapPicker(
               styles: SwisstopoStyles.all,
               selectedIndex: viewModel.currentStyleIndex,
               onSelected: (index) => viewModel.setStyleIndex(index),
             ),
-            const SizedBox(height: 12),
-
-            // 2. Profile Button
-            RoundActionButton(
-              icon: userService.isLoggedIn
-                  ? Icons.person
-                  : Icons.person_outlined,
-              onPressed: () => _showProfileSheet(context),
-            ),
-            const SizedBox(height: 12),
-
-            // 3. Add Location Button
+            SizedBox(height: touringBuddySpacings.sm),
             Tooltip(
-              message: userService.isLoggedIn
-                  ? 'Pick a new location'
-                  : 'Log in to add tours',
+              message: 'User profile',
+              child: RoundActionButton(
+                icon: Icons.account_circle,
+                onPressed: () => _showProfileSheet(context),
+              ),
+            ),
+            SizedBox(height: touringBuddySpacings.sm),
+            Tooltip(
+              message: 'Add contact',
+              child: RoundActionButton(
+                icon: Icons.person_add,
+                onPressed: () => _showContactSheet(context),
+              ),
+            ),
+            SizedBox(height: touringBuddySpacings.sm),
+            Tooltip(
+              message: 'Pick a new location',
               child: RoundActionButton(
                 icon: Icons.add_location,
                 onPressed: userService.isLoggedIn
@@ -75,6 +78,22 @@ class MapActionOverlay extends StatelessWidget {
         ),
         padding: EdgeInsets.all(20),
         child: const UserProfileSheet(),
+      ),
+    );
+  }
+
+  void _showContactSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        decoration: BoxDecoration(
+          color: touringBuddyTheme.colorScheme.surface,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        padding: EdgeInsets.all(20),
+        child: const ContactCreationSheet(),
       ),
     );
   }

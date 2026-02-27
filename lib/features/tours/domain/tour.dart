@@ -6,6 +6,7 @@ class Tour {
   final DateTime? plannedDate;
   final LatLng goal;
   final String? name;
+  final List<String> partnerIds;
 
   Tour({
     required this.id,
@@ -13,9 +14,11 @@ class Tour {
     this.plannedDate,
     required this.goal,
     this.name,
+    this.partnerIds = const [],
   });
 
   factory Tour.fromJson(Map<String, dynamic> json) {
+    final List<dynamic> rawPartnerIds = json['partner_ids'] ?? [];
     return Tour(
       id: json['id'],
       userId: json['user_id'],
@@ -27,6 +30,7 @@ class Tour {
         (json['lon'] as num).toDouble(),
       ),
       name: json['name'],
+      partnerIds: rawPartnerIds.map((e) => e.toString()).toList(),
     );
   }
 

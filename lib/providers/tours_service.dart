@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
+import 'package:touringbuddy_frontend/core/logging/app_logger.dart';
 import 'package:touringbuddy_frontend/features/tours/data/tours_repository.dart';
 import 'package:touringbuddy_frontend/features/tours/domain/tour.dart';
 import 'package:touringbuddy_frontend/features/tours/presentation/tour_creation_sheet.dart';
@@ -16,15 +17,7 @@ class ToursService extends ChangeNotifier {
     return List.unmodifiable(_tours);
   }
 
-  Future<String> newTourFromLocation(LatLng location) {
-    String userId = getCurrentUser().id;
-    String id = uuid.v4();
-
-    Tour newTour = Tour(id: id, userId: userId, goal: location);
-    return _repository.insertNewTour(newTour);
-  }
-
-  Future<String> newTourFromDraft(TourDraft draft, LatLng location) {
+  Future<String> newTourFromDraft(TourDraft draft, LatLng location) async {
     String userId = getCurrentUser().id;
     String id = uuid.v4();
     Tour newTour = Tour(
@@ -34,7 +27,21 @@ class ToursService extends ChangeNotifier {
       plannedDate: draft.plannedDate,
       name: draft.name,
     );
-    return _repository.insertNewTour(newTour);
+
+    try {
+      final tourId = await _repository.insertNewTour(
+        newTour,
+        draft.selectedPartnerIds,
+      );
+      logger.i(
+        'Successfully created new tour $tourId with ${draft.selectedPartnerIds.length} partners',
+      );
+      await getToursForCurrentUser();
+      return tourId;
+    } catch (e) {
+      logger.e('Failed to create new tour from draft: $e');
+      rethrow;
+    }
   }
 
   Future<void> getToursForCurrentUser() async {

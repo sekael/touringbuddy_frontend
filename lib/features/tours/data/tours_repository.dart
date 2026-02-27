@@ -4,7 +4,6 @@ import 'package:touringbuddy_frontend/features/tours/domain/tour.dart';
 import 'package:touringbuddy_frontend/supabase.dart';
 
 class ToursRepository {
-  final String _table = 'tours';
   final String _viewTable = 'tours_view';
   final SupabaseClient _client = Supabase.instance.client;
 
@@ -17,9 +16,18 @@ class ToursRepository {
     }
   }
 
-  Future<String> insertNewTour(Tour tour) async {
-    final response = await _client.from(_table).insert(tour).select('id');
-    return response.first['id'];
+  Future<String> insertNewTour(Tour tour, List<String> partnerIds) async {
+    return await _client.rpc(
+      'create_tour_with_partners',
+      params: {
+        'p_id': tour.id,
+        'p_planned_date': tour.plannedDate?.toIso8601String(),
+        'p_name': tour.name,
+        'p_goal':
+            'SRID=4326;POINT(${tour.goal.longitude} ${tour.goal.latitude})',
+        'p_partner_ids': partnerIds,
+      },
+    );
   }
 
   Future<List<Tour>> listToursForUser(String userId) async {
@@ -27,7 +35,7 @@ class ToursRepository {
 
     final rows = await _client
         .from(_viewTable)
-        .select('id, user_id, planned_date, name, lon, lat')
+        .select('id, user_id, planned_date, name, lon, lat, partner_ids')
         .eq('user_id', userId)
         .order('name');
 

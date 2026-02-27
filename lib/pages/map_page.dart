@@ -6,7 +6,6 @@ import 'package:touringbuddy_frontend/features/map/presentation/map_action_overl
 import 'package:touringbuddy_frontend/features/map/presentation/touringbuddy_map.dart';
 import 'package:touringbuddy_frontend/features/tours/map/tours_marker_layer.dart';
 
-// TODO: attach contacts to goals
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
 
