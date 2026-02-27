@@ -31,6 +31,7 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+
       - name: Tag Major and Minor Versions
         if: ${{ inputs.majorVersion != '' && inputs.minorVersion != '' }}
         run: |
@@ -61,11 +62,18 @@ jobs:
           echo "SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}" >> config/supabase.env
 
       - name: Build Web
-        run: flutter build web --release --base-href "/${{ github.event.repository.name }}/"
+        # Use "/" for custom domains on Cloudflare
+        run: flutter build web --release --base-href "/"
 
-      # Here you can add your deployment step (e.g., to GitHub Pages or S3)
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy build/web --project-name=touringbuddy --branch=main
+
       - name: Upload Production Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: touringbuddy-web:${{ inputs.image_tag }}
+          name: touringbuddy-web-${{ inputs.image_tag }}
           path: build/web
