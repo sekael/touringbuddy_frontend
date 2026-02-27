@@ -8,7 +8,6 @@ import 'package:touringbuddy_frontend/providers/user_service.dart';
 import 'package:touringbuddy_frontend/supabase.dart';
 
 // TODO: make it all look nice and consistent
-// TODO: add different colors for different types of tours
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<ScaffoldMessengerState> rootMessengerKey =
     GlobalKey<ScaffoldMessengerState>();

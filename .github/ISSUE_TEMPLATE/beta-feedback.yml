@@ -1,0 +1,22 @@
+name: User Feedback
+description: Report a bug or suggest a feature for TouringBuddy
+title: "[FEEDBACK]: "
+labels: ["user-feedback"]
+projects: ["sekael/projects/1"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping us improve TouringBuddy!
+  - type: textarea
+    id: feedback
+    attributes:
+      label: What's on your mind?
+      description: Describe the issue or your suggestion in detail.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: App Version
+      value: "1.0.0" # This matches your pubspec version
