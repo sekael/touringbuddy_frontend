@@ -1,0 +1,48 @@
+name: Analyze and Test Code
+
+on:
+  push:
+    branches: 
+    - "**"
+  pull_request:
+    branches: 
+    - main
+
+jobs:
+  analyze-and-test:
+    name: Static Analysis & Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # We must recreate the config directory and dummy env file here as well
+      # because the flutter analyzer reads pubspec.yaml and checks assets
+      - name: Create dummy env file
+        run: |
+          mkdir -p config
+          echo "SUPABASE_URL=https://placeholder.supabase.co" > config/supabase.env
+          echo "SUPABASE_ANON_KEY=placeholder" >> config/supabase.env
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      # 1. Check for formatting (Clean Code standard)
+      - name: Verify Formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      # 2. Run the Linter (Ensures your analysis_options.yaml is respected)
+      - name: Flutter Analyze
+        run: flutter analyze
+
+      # 3. Run Unit/Widget Tests
+      # Even if you have no tests yet, this will pass as long as there are no failures
+      - name: Run Tests
+        run: flutter test
