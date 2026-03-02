@@ -71,4 +71,4 @@ If you are interested in joining the project, implementing a couple of features 
 
 ## License
 
-Distributed under the [GNU General Public License v3](https://www.gnu.org/licenses/gpl-3.0.txt).
+Distributed under the [GNU General Public License v3](./LICENSE).
