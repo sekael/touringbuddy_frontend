@@ -22,6 +22,8 @@ To see all the currently planned features, please have a look at the [backlog](h
 ## Deployment
 
 The app is tested and built using [Github Actions](https://github.com/sekael/touringbuddy_frontend/actions).
+Versioning is handled automatically when closing a pull request by [release-please](https://github.com/googleapis/release-please).
+Finally, the static files built for the web are pushed to [Cloudflare pages](https://pages.cloudflare.com/), where they are hosted and made available worldwide.
 
 ## Local Testing and Development
 
