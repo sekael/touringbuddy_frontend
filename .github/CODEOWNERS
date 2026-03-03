@@ -1,0 +1,12 @@
+# Global owner for everything
+
+- @sekael
+
+# Specific owners for sensitive map configurations
+
+/assets/swisstopo_wmts_style.json @sekael
+
+# CI/CD and Ops are your territory
+
+/.github/workflows/ @sekael
+/release-please-config.json @sekael

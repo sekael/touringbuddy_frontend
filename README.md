@@ -55,6 +55,7 @@ Before embarking on the journey to add a larger feature, open a new issue and re
 
 ### Guidelines for Contributions
 
+- Include the number of the issue you are working on in the name of the feature branch, i.e. `feat/32-tours-full-implementation`
 - Keep pull requests as small as possible, be mindful of the scope that is still reviewable by a single person
 - Sign your commits! [Signed commits](https://git-scm.com/book/en/v2/Git-Tools-Signing-Your-Work)
 - Follow the guidelines for [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/), this is crucial for automated versioning using [release-please](https://github.com/googleapis/release-please)
