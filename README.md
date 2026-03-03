@@ -12,7 +12,7 @@ TouringBuddy aims to help you keep track of your objective and the partners you 
 
 TouringBuddy is built with [Flutter](https://flutter.dev/).
 At the moment, the web version is available for beta testing and feedback.
-The roadmap includes both an iOS and Android app, as well as the web application for use on Desktop.
+The [roadmap](./ROADMAP.md) includes both an iOS and Android app, as well as the web application for use on Desktop.
 To see all the currently planned features, please have a look at the [backlog](https://github.com/users/sekael/projects/1).
 
 <img src="docs/images/location-picker.png" width="800" alt="location picker"/>
