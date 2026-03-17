@@ -9,8 +9,7 @@
           "path": "pubspec.yaml",
           "jsonpath": "$.version"
         }
-      ],
-      "bootstrap-sha": "79e917e1421e2879aa580893406a58b3cce70dbc"
+      ]
     }
   },
   "plugins": [
