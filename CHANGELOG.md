@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/sekael/touringbuddy_frontend/compare/v1.1.0...v1.2.0) (2026-03-17)
+
+
+### Features
+
+* initialize swisstopo style at startup ([#41](https://github.com/sekael/touringbuddy_frontend/issues/41)) ([c16bf85](https://github.com/sekael/touringbuddy_frontend/commit/c16bf85900d8c90b6ee200a36abc146c7915c5fc))
+
 ## [1.1.0](https://github.com/sekael/touringbuddy_frontend/compare/v1.0.0...v1.1.0) (2026-02-27)
 
 
