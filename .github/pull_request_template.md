@@ -6,17 +6,17 @@
 
 > List the features you implemented, changes you made
 
-- [ ]
+- Feature so and so
 
 ## 🏗️ Not Yet Implemented (Follow-up)
 
 > Were any follow-up tasks created?
 
-- [ ] Task name (Issue #ID)
+- [ ] Feature and task name (Issue #ID)
 
 ## 🧪 Quality Checklist
 
-- [ ] I have read the [**contribution guidelines**](../README.md#guidelines-for-contributions) for this project.
+- [ ] I have read the [**contribution guidelines**](https://github.com/sekael/touringbuddy_frontend/blob/main/README.md#contributing) for this project.
 - [ ] I have performed a self-review of my own code.
 - [ ] `flutter analyze` passes locally with no warnings.
 - [ ] I have added/updated unit or widget tests (if applicable).
