@@ -16,6 +16,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:touringbuddy_frontend/core/config/theme.dart';
+import 'package:touringbuddy_frontend/features/map/data/swisstopo_styles.dart';
 import 'package:touringbuddy_frontend/pages/auth_gate.dart';
 import 'package:touringbuddy_frontend/providers/contacts_service.dart';
 import 'package:touringbuddy_frontend/providers/tours_service.dart';
@@ -30,6 +31,8 @@ final GlobalKey<ScaffoldMessengerState> rootMessengerKey =
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeSupabase();
+  await SwisstopoStyles.initialize();
+
   runApp(
     MultiProvider(
       providers: [
