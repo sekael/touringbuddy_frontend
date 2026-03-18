@@ -9,7 +9,6 @@ import 'package:touringbuddy_frontend/features/map/data/map_view_model.dart';
 import 'package:touringbuddy_frontend/features/map/presentation/location_picker.dart';
 import 'package:touringbuddy_frontend/features/map/presentation/map_action_overlay.dart';
 import 'package:touringbuddy_frontend/features/map/presentation/touringbuddy_map.dart';
-import 'package:touringbuddy_frontend/features/tours/map/tours_marker_layer.dart';
 import 'package:touringbuddy_frontend/main.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -21,17 +20,13 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  late final ToursMarkerLayer _toursSymbolLayer;
-
   @override
   void initState() {
     super.initState();
-    _toursSymbolLayer = ToursMarkerLayer();
   }
 
   @override
   void dispose() {
-    _toursSymbolLayer.detach();
     super.dispose();
   }
 
