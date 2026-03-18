@@ -7,8 +7,8 @@ import 'package:touringbuddy_frontend/features/tours/domain/tour.dart';
 class ToursMarkerLayer {
   MapLibreMapController? _controller;
 
-  static const double _defaultRadius = 8.0;
-  static const double _selectedRadius = 16.0;
+  static const double _defaultRadius = 14.0;
+  static const double _selectedRadius = 18.0;
   static final String _circleColor = Colors.red.toHexStringRGB();
 
   void attach(MapLibreMapController controller) {
