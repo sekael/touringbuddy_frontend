@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/sekael/touringbuddy_frontend/compare/v1.2.0...v1.3.0) (2026-03-18)
+
+
+### Features
+
+* increase size of markers ([#46](https://github.com/sekael/touringbuddy_frontend/issues/46)) ([0bc445e](https://github.com/sekael/touringbuddy_frontend/commit/0bc445e108745e857556372d2127761e71ccb81d))
+
 ## [1.2.0](https://github.com/sekael/touringbuddy_frontend/compare/v1.1.0...v1.2.0) (2026-03-17)
 
 
