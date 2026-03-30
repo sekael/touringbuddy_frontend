@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/sekael/touringbuddy_frontend/compare/v1.3.0...v1.4.0) (2026-03-30)
+
+
+### Features
+
+* add icons for mobile and web ([#49](https://github.com/sekael/touringbuddy_frontend/issues/49)) ([e1d8fd3](https://github.com/sekael/touringbuddy_frontend/commit/e1d8fd3bf14b7fa4ede3d27ce17d906489a18a40))
+
 ## [1.3.0](https://github.com/sekael/touringbuddy_frontend/compare/v1.2.0...v1.3.0) (2026-03-18)
 
 
