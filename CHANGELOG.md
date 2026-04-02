@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.0](https://github.com/sekael/touringbuddy_frontend/compare/v1.4.0...v1.5.0) (2026-04-02)
+
+
+### Features
+
+* add claude ([#52](https://github.com/sekael/touringbuddy_frontend/issues/52)) ([68d0f07](https://github.com/sekael/touringbuddy_frontend/commit/68d0f07f1dc94ef6ba36f0585211db02daa0fc3c))
+* make application PWA ready ([#54](https://github.com/sekael/touringbuddy_frontend/issues/54)) ([7e06ee4](https://github.com/sekael/touringbuddy_frontend/commit/7e06ee4d9233a6f0445066f0439ca979ac918b57))
+
 ## [1.4.0](https://github.com/sekael/touringbuddy_frontend/compare/v1.3.0...v1.4.0) (2026-03-30)
 
 
