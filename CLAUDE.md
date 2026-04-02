@@ -35,8 +35,12 @@ A Flutter tour-planning app for outdoor enthusiasts. Users pin tour objectives o
 
 ## Planning & Thinking
 
-- IMPORTANT: For any new feature or non-trivial change, ALWAYS start with 
-- Wait for explicit user approval of the plan before implementing
+- IMPORTANT: For any new feature or non-trivial change, specification-driven development MUST be applied 
+- ALWAYS start with OpenSpec skills:
+  - **DEFAULT**: `openspec-propose` to propose a new change with all artifacts generated in one step. Use when the user wants to quickly describe what they want to build and get a complete proposal with design, specs, and tasks ready for implementation.
+  - `openspec-explore` to enter explore mode - a thinking partner for exploring ideas, investigating problems, and clarifying requirements. Use when the user wants to think through something before or during a change.
+- Wait for explicit user approval of the plan before implementing with `openspec-apply` skill
+- Prompt the user to archive a completed task with the `openspec-archive` skill
 - If a task seems simple but touches >3 files, still produce a brief plan
 
 ## Project Structure
