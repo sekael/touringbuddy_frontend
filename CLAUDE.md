@@ -5,6 +5,7 @@ A Flutter tour-planning app for outdoor enthusiasts. Users pin tour objectives o
 ## General Principles
 
 - Use subagents aggressively for tasks that can be delegated
+- Switch to Opus 4.6 for planning and thinking tasks, and when creating specifications, use Sonnet 4.6 for code implementation
 - **Framework:** Flutter (latest stable) with Dart
 - **Targets:** Web (primary, Cloudflare Pages), support for progressive web applications (PWA)
 - **State management:** Riverpod 3 with code generation (`@riverpod`, `AsyncNotifier`, `riverpod_generator`)
@@ -35,8 +36,8 @@ A Flutter tour-planning app for outdoor enthusiasts. Users pin tour objectives o
 
 ## Planning & Thinking
 
-- IMPORTANT: For any new feature or non-trivial change, specification-driven development MUST be applied 
-- ALWAYS start with OpenSpec skills:
+- IMPORTANT: For any new feature or non-trivial change, specification-driven development MUST ALWAYS be applied
+- Start with OpenSpec skills:
   - **DEFAULT**: `openspec-propose` to propose a new change with all artifacts generated in one step. Use when the user wants to quickly describe what they want to build and get a complete proposal with design, specs, and tasks ready for implementation.
   - `openspec-explore` to enter explore mode - a thinking partner for exploring ideas, investigating problems, and clarifying requirements. Use when the user wants to think through something before or during a change.
 - Wait for explicit user approval of the plan before implementing with `openspec-apply` skill
@@ -77,27 +78,27 @@ integration_test/                   # E2E integration tests
 
 ```yaml
 dependencies:
-  flutter_riverpod: ^3.3.1          # State management
-  riverpod_annotation: ^4.0.2       # @riverpod code generation annotations
-  go_router: ^17.1.0                # Declarative routing
-  supabase_flutter: ^2.12.0         # Backend (PostgreSQL + Auth)
-  maplibre_gl: ^0.25.0              # Map rendering with Swisstopo vector tiles
-  drift: ^2.32.1                    # Local structured data (SQLite)
-  logger: ^2.6.2                    # Logging
-  uuid: ^4.5.2                      # UUID generation
-  flutter_dotenv: ^6.0.0            # Environment variables
-  url_launcher: ^6.3.2              # External links
-  cupertino_icons: ^1.0.8           # iOS-style icons
+  flutter_riverpod: ^3.3.1 # State management
+  riverpod_annotation: ^4.0.2 # @riverpod code generation annotations
+  go_router: ^17.1.0 # Declarative routing
+  supabase_flutter: ^2.12.0 # Backend (PostgreSQL + Auth)
+  maplibre_gl: ^0.25.0 # Map rendering with Swisstopo vector tiles
+  drift: ^2.32.1 # Local structured data (SQLite)
+  logger: ^2.6.2 # Logging
+  uuid: ^4.5.2 # UUID generation
+  flutter_dotenv: ^6.0.0 # Environment variables
+  url_launcher: ^6.3.2 # External links
+  cupertino_icons: ^1.0.8 # iOS-style icons
 
 dev_dependencies:
-  very_good_analysis: ^10.2.0       # Strict lint rules
-  build_runner: ^2.4.0              # Code generation runner
-  riverpod_generator: ^4.0.3        # Riverpod code generation
-  riverpod_lint: ^4.0.0             # Riverpod-specific lint rules
-  custom_lint: ^0.7.5               # Required by riverpod_lint
-  json_serializable: ^6.9.5         # JSON serialization code generation
-  drift_dev: ^2.26.0                # Drift code generation
-  mocktail: ^1.0.4                  # Mocking for tests
+  very_good_analysis: ^10.2.0 # Strict lint rules
+  build_runner: ^2.4.0 # Code generation runner
+  riverpod_generator: ^4.0.3 # Riverpod code generation
+  riverpod_lint: ^4.0.0 # Riverpod-specific lint rules
+  custom_lint: ^0.7.5 # Required by riverpod_lint
+  json_serializable: ^6.9.5 # JSON serialization code generation
+  drift_dev: ^2.26.0 # Drift code generation
+  mocktail: ^1.0.4 # Mocking for tests
 ```
 
 ## Data Flow
