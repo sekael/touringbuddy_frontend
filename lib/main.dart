@@ -16,6 +16,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:touringbuddy_frontend/core/config/theme.dart';
+import 'package:touringbuddy_frontend/core/pwa/pwa_install_banner.dart';
+import 'package:touringbuddy_frontend/core/pwa/pwa_install_service.dart';
 import 'package:touringbuddy_frontend/features/map/data/swisstopo_styles.dart';
 import 'package:touringbuddy_frontend/pages/auth_gate.dart';
 import 'package:touringbuddy_frontend/providers/contacts_service.dart';
@@ -36,6 +38,7 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => PwaInstallService()),
         ChangeNotifierProvider(create: (_) => UserService()..init()),
         ChangeNotifierProxyProvider<UserService, ContactsService>(
           create: (_) => ContactsService(),
@@ -60,7 +63,7 @@ Future<void> main() async {
           },
         ),
       ],
-      child: MainApp(),
+      child: const MainApp(),
     ),
   );
 }
@@ -71,11 +74,11 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Touring Buddy',
+      title: 'TouringBuddy',
       theme: touringBuddyTheme,
       scaffoldMessengerKey: rootMessengerKey,
       navigatorKey: rootNavigatorKey,
-      home: const AuthGate(),
+      home: const PwaInstallBanner(child: AuthGate()),
     );
   }
 }
