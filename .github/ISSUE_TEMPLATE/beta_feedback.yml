@@ -1,5 +1,5 @@
 name: User Feedback
-description: Report a bug or suggest a feature for TouringBuddy
+description: Report a bug or suggest a feature for TourenBuddy
 title: "[FEEDBACK]: "
 labels: ["user-feedback"]
 projects: ["sekael/projects/1"]
@@ -7,7 +7,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for helping us improve TouringBuddy!
+        Thanks for helping us improve TourenBuddy!
   - type: textarea
     id: feedback
     attributes:

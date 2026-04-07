@@ -22,17 +22,17 @@ class HomePage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    TitleText(titleText: 'Welcome to TouringBuddy'),
+                    TitleText(titleText: 'Welcome to TourenBuddy'),
                     CenterAlignedBodyText(
                       bodyText:
-                          'TouringBuddy helps you plan and coordinate your adventures outdoors.',
+                          'TourenBuddy helps you plan and coordinate your adventures outdoors.',
                     ),
                     CenterAlignedBodyText(
                       bodyText:
-                          'Please sign in to start using TouringBuddy, have fun!',
+                          'Please sign in to start using TourenBuddy, have fun!',
                     ),
                     Padding(
-                      padding: EdgeInsets.all(touringBuddySpacings.md),
+                      padding: EdgeInsets.all(tourenBuddySpacings.md),
                       child: ElevatedButton(
                         onPressed: () {
                           Navigator.of(context).push(

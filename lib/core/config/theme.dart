@@ -14,7 +14,7 @@ final ColorScheme colorScheme = ColorScheme.fromSeed(
   brightness: Brightness.light,
 );
 
-final ThemeData touringBuddyTheme = ThemeData(
+final ThemeData tourenBuddyTheme = ThemeData(
   useMaterial3: true,
   colorScheme: colorScheme,
   visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -30,4 +30,4 @@ final ThemeData touringBuddyTheme = ThemeData(
   extensions: const <ThemeExtension<dynamic>>[SpacingTokens(), RadiusTokens()],
 );
 
-final touringBuddySpacings = touringBuddyTheme.extension<SpacingTokens>()!;
+final tourenBuddySpacings = tourenBuddyTheme.extension<SpacingTokens>()!;

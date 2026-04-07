@@ -26,7 +26,7 @@ class UserProfileSheet extends StatelessWidget {
             color: Theme.of(context).colorScheme.onSurface,
           ),
         ),
-        SizedBox(height: touringBuddySpacings.sm),
+        SizedBox(height: tourenBuddySpacings.sm),
         ListTile(
           leading: const Icon(Icons.badge_outlined),
           title: Text(
@@ -41,7 +41,7 @@ class UserProfileSheet extends StatelessWidget {
           title: Text(email.isEmpty ? '—' : email),
           subtitle: const Text('Email'),
         ),
-        SizedBox(height: touringBuddySpacings.sm),
+        SizedBox(height: tourenBuddySpacings.sm),
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(

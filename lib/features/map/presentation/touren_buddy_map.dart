@@ -9,14 +9,14 @@ import 'package:touringbuddy_frontend/features/tours/map/tours_marker_layer.dart
 import 'package:touringbuddy_frontend/features/tours/presentation/tour_info_sheet.dart';
 import 'package:touringbuddy_frontend/providers/tours_service.dart';
 
-class TouringBuddyMap extends StatefulWidget {
-  const TouringBuddyMap({super.key});
+class TourenBuddyMap extends StatefulWidget {
+  const TourenBuddyMap({super.key});
 
   @override
-  State<TouringBuddyMap> createState() => _TouringBuddyMapState();
+  State<TourenBuddyMap> createState() => _TourenBuddyMapState();
 }
 
-class _TouringBuddyMapState extends State<TouringBuddyMap> {
+class _TourenBuddyMapState extends State<TourenBuddyMap> {
   late final ToursMarkerLayer _toursLayer;
   MapViewModel? _viewModel;
 
@@ -64,7 +64,7 @@ class _TouringBuddyMapState extends State<TouringBuddyMap> {
       barrierColor: Colors.transparent,
       builder: (context) => Container(
         decoration: BoxDecoration(
-          color: touringBuddyTheme.colorScheme.surface,
+          color: tourenBuddyTheme.colorScheme.surface,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         ),
         padding: EdgeInsets.all(20),

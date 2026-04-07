@@ -28,25 +28,25 @@ class TourInfoSheet extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: touringBuddySpacings.sm),
+        SizedBox(height: tourenBuddySpacings.sm),
         if (tour.plannedDate != null)
           Row(
             children: [
               Icon(
                 Icons.calendar_today,
                 size: 16,
-                color: touringBuddyTheme.hintColor,
+                color: tourenBuddyTheme.hintColor,
               ),
-              SizedBox(width: touringBuddySpacings.xs),
+              SizedBox(width: tourenBuddySpacings.xs),
               Text(
                 'Planned for: ${tour.plannedDate!.toLocal().toString().split(' ')[0]}',
-                style: touringBuddyTheme.textTheme.bodyMedium?.copyWith(
-                  color: touringBuddyTheme.hintColor,
+                style: tourenBuddyTheme.textTheme.bodyMedium?.copyWith(
+                  color: tourenBuddyTheme.hintColor,
                 ),
               ),
             ],
           ),
-        Divider(height: touringBuddySpacings.lg),
+        Divider(height: tourenBuddySpacings.lg),
         ListTile(
           contentPadding: EdgeInsets.zero,
           leading: const CircleAvatar(child: Icon(Icons.location_on)),
@@ -55,12 +55,12 @@ class TourInfoSheet extends StatelessWidget {
             '${tour.goal.latitude.toStringAsFixed(5)}, ${tour.goal.longitude.toStringAsFixed(5)}',
           ),
         ),
-        Divider(height: touringBuddySpacings.lg),
+        Divider(height: tourenBuddySpacings.lg),
         Text(
           'Touring Partners',
           style: Theme.of(context).textTheme.titleMedium,
         ),
-        SizedBox(height: touringBuddySpacings.xs),
+        SizedBox(height: tourenBuddySpacings.xs),
         if (partners.isEmpty)
           const Text(
             'No partners added to this tour.',
@@ -68,7 +68,7 @@ class TourInfoSheet extends StatelessWidget {
           )
         else
           Wrap(
-            spacing: touringBuddySpacings.xs,
+            spacing: tourenBuddySpacings.xs,
             children: partners
                 .map(
                   (p) => Chip(

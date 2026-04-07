@@ -34,7 +34,7 @@ class MapActionOverlay extends StatelessWidget {
               selectedIndex: viewModel.currentStyleIndex,
               onSelected: (index) => viewModel.setStyleIndex(index),
             ),
-            SizedBox(height: touringBuddySpacings.sm),
+            SizedBox(height: tourenBuddySpacings.sm),
             Tooltip(
               message: 'User profile',
               child: RoundActionButton(
@@ -42,7 +42,7 @@ class MapActionOverlay extends StatelessWidget {
                 onPressed: () => _showProfileSheet(context),
               ),
             ),
-            SizedBox(height: touringBuddySpacings.sm),
+            SizedBox(height: tourenBuddySpacings.sm),
             Tooltip(
               message: 'Add contact',
               child: RoundActionButton(
@@ -50,7 +50,7 @@ class MapActionOverlay extends StatelessWidget {
                 onPressed: () => _showContactSheet(context),
               ),
             ),
-            SizedBox(height: touringBuddySpacings.sm),
+            SizedBox(height: tourenBuddySpacings.sm),
             Tooltip(
               message: 'Pick a new location',
               child: RoundActionButton(
@@ -73,7 +73,7 @@ class MapActionOverlay extends StatelessWidget {
       backgroundColor: Colors.transparent,
       builder: (context) => Container(
         decoration: BoxDecoration(
-          color: touringBuddyTheme.colorScheme.surface,
+          color: tourenBuddyTheme.colorScheme.surface,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         ),
         padding: EdgeInsets.all(20),
@@ -89,7 +89,7 @@ class MapActionOverlay extends StatelessWidget {
       backgroundColor: Colors.transparent,
       builder: (context) => Container(
         decoration: BoxDecoration(
-          color: touringBuddyTheme.colorScheme.surface,
+          color: tourenBuddyTheme.colorScheme.surface,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         ),
         padding: EdgeInsets.all(20),

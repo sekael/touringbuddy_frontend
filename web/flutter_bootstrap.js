@@ -8,7 +8,7 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker
       .register('sw.js')
       .catch(function (err) {
-        console.warn('TouringBuddy: Service worker registration failed:', err);
+        console.warn('TourenBuddy: Service worker registration failed:', err);
       });
   });
 }

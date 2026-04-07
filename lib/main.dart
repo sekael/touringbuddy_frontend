@@ -74,8 +74,8 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'TouringBuddy',
-      theme: touringBuddyTheme,
+      title: 'TourenBuddy',
+      theme: tourenBuddyTheme,
       scaffoldMessengerKey: rootMessengerKey,
       navigatorKey: rootNavigatorKey,
       home: const PwaInstallBanner(child: AuthGate()),
