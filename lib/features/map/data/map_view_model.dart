@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
-import 'package:touringbuddy_frontend/core/logging/app_logger.dart';
 import 'package:touringbuddy_frontend/features/tours/domain/tour.dart';
 
 class MapViewModel extends ChangeNotifier {
@@ -57,17 +56,19 @@ class MapViewModel extends ChangeNotifier {
       // WEB WORKAROUND: Offset the LatLng manually so the marker is centered
       // within the map area that remains visible above the modal bottom sheet.
       // We shift the camera target down by half of that remaining height,
-      // expressed in latitude degrees. 360 / 2^(zoom + 8) is a rough
+      // expressed in latitude degrees. 360 / 2^(zoom + 10) is a rough
       // approximation for deg/pixel at the equator.
-      logger.i('Bottom sheet height = $bottomSheetHeight');
       final double remainingMapHeight = (screenHeight - bottomSheetHeight)
           .clamp(0, double.infinity)
           .toDouble();
-      logger.i('Remaining Map height = $remainingMapHeight');
-      final double offsetPixels = remainingMapHeight / 2;
-      final double latOffset = offsetPixels * (360 / pow(2, zoom + 8));
-      logger.i('Offset Pixels = $offsetPixels');
-      logger.i('Latitute Offset = $latOffset');
+      final double offsetPixels = (remainingMapHeight / 2);
+
+      // In Web Mercator, degrees of latitude per pixel shrink with latitude
+      // by a factor of cos(lat). Without this correction the offset is too
+      // large at non-equatorial latitudes (e.g. ~45°N for Switzerland).
+      final double latRadians = tour.goal.latitude * pi / 180;
+      final double degPerPixel = (360 / pow(2, zoom + 10)) * cos(latRadians);
+      final double latOffset = offsetPixels * degPerPixel;
       final LatLng offsetTarget = LatLng(
         tour.goal.latitude - latOffset,
         tour.goal.longitude,
