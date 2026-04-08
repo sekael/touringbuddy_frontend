@@ -72,9 +72,6 @@ class MapViewModel extends ChangeNotifier {
         );
       }
     }
-    await _mapController!.animateCamera(
-      CameraUpdate.newLatLngZoom(tour.goal, zoom),
-    );
   }
 
   // Method to reset the camera view when the tour info sheet is closed

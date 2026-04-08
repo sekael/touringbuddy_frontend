@@ -65,17 +65,6 @@ class LocationPicker extends StatelessWidget {
 
     viewModel.setPickingLocation(false);
 
-    // Offset the camera so the picked point remains visible above the modal
-    // bottom sheet. The sheet covers roughly the lower half of the screen, so
-    // shifting the camera center down by ~25% of the screen height moves the
-    // point into the upper visible area.
-    final screenHeight = MediaQuery.of(context).size.height;
-    await controller.animateCamera(
-      CameraUpdate.scrollBy(0, screenHeight * 0.25),
-    );
-
-    if (!context.mounted) return;
-
     final result = await showModalBottomSheet<TourDraft>(
       context: context,
       isScrollControlled: true,
