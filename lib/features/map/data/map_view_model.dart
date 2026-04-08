@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
+import 'package:touringbuddy_frontend/core/logging/app_logger.dart';
 import 'package:touringbuddy_frontend/features/tours/domain/tour.dart';
 
 class MapViewModel extends ChangeNotifier {
@@ -36,6 +37,11 @@ class MapViewModel extends ChangeNotifier {
   String? _selectedTourId;
   String? get selectedTourId => _selectedTourId;
 
+  void markTourSelected(Tour? tour) {
+    _selectedTourId = tour?.id;
+    notifyListeners();
+  }
+
   Future<void> selectTour(
     Tour? tour,
     double zoom, {
@@ -53,11 +59,15 @@ class MapViewModel extends ChangeNotifier {
       // We shift the camera target down by half of that remaining height,
       // expressed in latitude degrees. 360 / 2^(zoom + 8) is a rough
       // approximation for deg/pixel at the equator.
+      logger.i('Bottom sheet height = $bottomSheetHeight');
       final double remainingMapHeight = (screenHeight - bottomSheetHeight)
           .clamp(0, double.infinity)
           .toDouble();
+      logger.i('Remaining Map height = $remainingMapHeight');
       final double offsetPixels = remainingMapHeight / 2;
       final double latOffset = offsetPixels * (360 / pow(2, zoom + 8));
+      logger.i('Offset Pixels = $offsetPixels');
+      logger.i('Latitute Offset = $latOffset');
       final LatLng offsetTarget = LatLng(
         tour.goal.latitude - latOffset,
         tour.goal.longitude,

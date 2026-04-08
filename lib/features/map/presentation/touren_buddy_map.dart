@@ -55,31 +55,36 @@ class _TourenBuddyMapState extends State<TourenBuddyMap> {
 
     final viewModel = context.read<MapViewModel>();
     final screenHeight = MediaQuery.of(context).size.height;
-    // Rough estimate of the TourInfoSheet height. The sheet shrink-wraps its
-    // content, but we need a value before it is built so the camera offset
-    // can be computed up front.
-    const bottomSheetHeight = 350.0;
-    viewModel.selectTour(
-      tour,
-      14.0,
-      screenHeight: screenHeight,
-      bottomSheetHeight: bottomSheetHeight,
-    );
+    viewModel.markTourSelected(tour);
 
     logger.i('Selected tour: ${tour.toGeoJsonFeature()}');
+    final sheetKey = GlobalKey();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       barrierColor: Colors.transparent,
-      builder: (context) => Container(
-        decoration: BoxDecoration(
-          color: tourenBuddyTheme.colorScheme.surface,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        padding: EdgeInsets.all(20),
-        child: TourInfoSheet(tour: tour),
-      ),
+      builder: (context) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          final box = sheetKey.currentContext?.findRenderObject() as RenderBox?;
+          if (box == null) return;
+          viewModel.selectTour(
+            tour,
+            14.0,
+            screenHeight: screenHeight,
+            bottomSheetHeight: box.size.height,
+          );
+        });
+        return Container(
+          key: sheetKey,
+          decoration: BoxDecoration(
+            color: tourenBuddyTheme.colorScheme.surface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          padding: const EdgeInsets.all(20),
+          child: TourInfoSheet(tour: tour),
+        );
+      },
     ).then((_) {
       viewModel.resetCameraView();
     });
