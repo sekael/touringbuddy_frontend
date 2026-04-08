@@ -54,22 +54,37 @@ class _TourenBuddyMapState extends State<TourenBuddyMap> {
     final tour = toursService.tours.firstWhere((t) => t.id == tourId);
 
     final viewModel = context.read<MapViewModel>();
-    viewModel.selectTour(tour, 14.0);
+    final screenHeight = MediaQuery.of(context).size.height;
+    viewModel.markTourSelected(tour);
 
     logger.i('Selected tour: ${tour.toGeoJsonFeature()}');
+    final sheetKey = GlobalKey();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       barrierColor: Colors.transparent,
-      builder: (context) => Container(
-        decoration: BoxDecoration(
-          color: tourenBuddyTheme.colorScheme.surface,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        padding: EdgeInsets.all(20),
-        child: TourInfoSheet(tour: tour),
-      ),
+      builder: (context) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          final box = sheetKey.currentContext?.findRenderObject() as RenderBox?;
+          if (box == null) return;
+          viewModel.selectTour(
+            tour,
+            14.0,
+            screenHeight: screenHeight,
+            bottomSheetHeight: box.size.height,
+          );
+        });
+        return Container(
+          key: sheetKey,
+          decoration: BoxDecoration(
+            color: tourenBuddyTheme.colorScheme.surface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          padding: const EdgeInsets.all(20),
+          child: TourInfoSheet(tour: tour),
+        );
+      },
     ).then((_) {
       viewModel.resetCameraView();
     });
