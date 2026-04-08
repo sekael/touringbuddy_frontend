@@ -54,7 +54,17 @@ class _TourenBuddyMapState extends State<TourenBuddyMap> {
     final tour = toursService.tours.firstWhere((t) => t.id == tourId);
 
     final viewModel = context.read<MapViewModel>();
-    viewModel.selectTour(tour, 14.0);
+    final screenHeight = MediaQuery.of(context).size.height;
+    // Rough estimate of the TourInfoSheet height. The sheet shrink-wraps its
+    // content, but we need a value before it is built so the camera offset
+    // can be computed up front.
+    const bottomSheetHeight = 350.0;
+    viewModel.selectTour(
+      tour,
+      14.0,
+      screenHeight: screenHeight,
+      bottomSheetHeight: bottomSheetHeight,
+    );
 
     logger.i('Selected tour: ${tour.toGeoJsonFeature()}');
     showModalBottomSheet(

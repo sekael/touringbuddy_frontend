@@ -36,17 +36,28 @@ class MapViewModel extends ChangeNotifier {
   String? _selectedTourId;
   String? get selectedTourId => _selectedTourId;
 
-  Future<void> selectTour(Tour? tour, double zoom) async {
+  Future<void> selectTour(
+    Tour? tour,
+    double zoom, {
+    double screenHeight = 0,
+    double bottomSheetHeight = 0,
+  }) async {
     _selectedTourId = tour?.id;
     notifyListeners();
 
     if (_mapController == null || tour == null) return;
 
     if (kIsWeb) {
-      // WEB WORKAROUND: Offset the LatLng manually
-      // We calculate a latitude offset based on the current zoom.
-      // 360 / 2^(zoom + 8) is a rough approximation for deg/pixel at the equator.
-      final double latOffset = 250 * (360 / pow(2, zoom + 8));
+      // WEB WORKAROUND: Offset the LatLng manually so the marker is centered
+      // within the map area that remains visible above the modal bottom sheet.
+      // We shift the camera target down by half of that remaining height,
+      // expressed in latitude degrees. 360 / 2^(zoom + 8) is a rough
+      // approximation for deg/pixel at the equator.
+      final double remainingMapHeight = (screenHeight - bottomSheetHeight)
+          .clamp(0, double.infinity)
+          .toDouble();
+      final double offsetPixels = remainingMapHeight / 2;
+      final double latOffset = offsetPixels * (360 / pow(2, zoom + 8));
       final LatLng offsetTarget = LatLng(
         tour.goal.latitude - latOffset,
         tour.goal.longitude,
