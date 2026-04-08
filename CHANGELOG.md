@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/sekael/tourenbuddy_frontend_flutter/compare/v1.5.0...v1.6.0) (2026-04-08)
+
+
+### Features
+
+* rename all references to tourenbuddy ([#56](https://github.com/sekael/tourenbuddy_frontend_flutter/issues/56)) ([2e8d78a](https://github.com/sekael/tourenbuddy_frontend_flutter/commit/2e8d78a3ba3147ac13b7b975aa6b89ec3498d4e8))
+
 ## [1.5.0](https://github.com/sekael/touringbuddy_frontend/compare/v1.4.0...v1.5.0) (2026-04-02)
 
 
