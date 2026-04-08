@@ -72,8 +72,7 @@ class _TourCreationSheetState extends State<TourCreationSheet> {
           right: tourenBuddySpacings.lg,
           top: tourenBuddySpacings.lg,
           bottom:
-              MediaQuery.of(context).viewInsets.bottom +
-              tourenBuddySpacings.lg,
+              MediaQuery.of(context).viewInsets.bottom + tourenBuddySpacings.lg,
         ),
         child: Form(
           key: _formKey,
