@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.1](https://github.com/sekael/tourenbuddy_frontend_flutter/compare/v1.6.0...v1.6.1) (2026-04-08)
+
+
+### Bug Fixes
+
+* **map:** keep picked position visible above tour creation sheet ([#59](https://github.com/sekael/tourenbuddy_frontend_flutter/issues/59)) ([e2e6eb5](https://github.com/sekael/tourenbuddy_frontend_flutter/commit/e2e6eb59d5b89508bbb9e7cfe58ff3aa3d06ac4b))
+
 ## [1.6.0](https://github.com/sekael/tourenbuddy_frontend_flutter/compare/v1.5.0...v1.6.0) (2026-04-08)
 
 
