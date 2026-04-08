@@ -30,11 +30,11 @@ class _ContactCreationSheetState extends State<ContactCreationSheet> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-        left: touringBuddySpacings.lg,
-        right: touringBuddySpacings.lg,
-        top: touringBuddySpacings.lg,
+        left: tourenBuddySpacings.lg,
+        right: tourenBuddySpacings.lg,
+        top: tourenBuddySpacings.lg,
         bottom:
-            MediaQuery.of(context).viewInsets.bottom + touringBuddySpacings.lg,
+            MediaQuery.of(context).viewInsets.bottom + tourenBuddySpacings.lg,
       ),
       child: Form(
         key: _formKey,
@@ -46,7 +46,7 @@ class _ContactCreationSheetState extends State<ContactCreationSheet> {
               'Add New Contact',
               style: Theme.of(context).textTheme.headlineSmall,
             ),
-            SizedBox(height: touringBuddySpacings.md),
+            SizedBox(height: tourenBuddySpacings.md),
             TextFormField(
               controller: _firstCtrl,
               decoration: const InputDecoration(
@@ -55,7 +55,7 @@ class _ContactCreationSheetState extends State<ContactCreationSheet> {
               ),
               validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
             ),
-            SizedBox(height: touringBuddySpacings.sm),
+            SizedBox(height: tourenBuddySpacings.sm),
             TextFormField(
               controller: _lastCtrl,
               decoration: const InputDecoration(
@@ -63,7 +63,7 @@ class _ContactCreationSheetState extends State<ContactCreationSheet> {
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: touringBuddySpacings.sm),
+            SizedBox(height: tourenBuddySpacings.sm),
             TextFormField(
               controller: _displayCtrl,
               decoration: const InputDecoration(
@@ -71,7 +71,7 @@ class _ContactCreationSheetState extends State<ContactCreationSheet> {
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: touringBuddySpacings.lg),
+            SizedBox(height: tourenBuddySpacings.lg),
             FilledButton(
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {

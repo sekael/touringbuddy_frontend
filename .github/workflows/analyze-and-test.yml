@@ -8,12 +8,12 @@ on:
       - opened
       - reopened
       - synchronize
-      - ready_for_review
 
 jobs:
   analyze-and-test:
     name: Static Analysis & Tests
     runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
 
     steps:
       - name: Checkout Repository

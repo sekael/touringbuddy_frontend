@@ -18,7 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:touringbuddy_frontend/core/pwa/pwa_install_service.dart';
 
-/// Displays a material banner prompting the user to install TouringBuddy as
+/// Displays a material banner prompting the user to install TourenBuddy as
 /// a PWA. Only rendered on web when the browser signals install eligibility.
 ///
 /// Wrap the app body with this widget to display the banner at the top of the

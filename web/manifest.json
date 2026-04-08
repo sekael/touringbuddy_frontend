@@ -1,6 +1,6 @@
 {
-    "name": "TouringBuddy",
-    "short_name": "TouringBuddy",
+    "name": "TourenBuddy",
+    "short_name": "TourenBuddy",
     "description": "Plan and coordinate your outdoor adventures. Pin tour objectives on Swiss topographic maps, invite partners, and set dates.",
     "start_url": "/",
     "scope": "/",

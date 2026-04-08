@@ -98,12 +98,12 @@ class _OtpVerifyPageState extends State<OtpVerifyPage> {
       appBar: AppBar(title: const Text('Verify Code')),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(touringBuddySpacings.md),
+          padding: EdgeInsets.all(tourenBuddySpacings.md),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text('Enter the code we sent to ${widget.email}.'),
-              SizedBox(height: touringBuddySpacings.sm),
+              SizedBox(height: tourenBuddySpacings.sm),
               TextField(
                 controller: _codeCtrl,
                 keyboardType: TextInputType.number,
@@ -116,7 +116,7 @@ class _OtpVerifyPageState extends State<OtpVerifyPage> {
                 ),
                 onSubmitted: (_) => _verify(),
               ),
-              SizedBox(height: touringBuddySpacings.md),
+              SizedBox(height: tourenBuddySpacings.md),
               ElevatedButton(
                 onPressed: _validating ? null : _verify,
                 child: ButtonText(
@@ -124,7 +124,7 @@ class _OtpVerifyPageState extends State<OtpVerifyPage> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(touringBuddySpacings.sm),
+                padding: EdgeInsets.all(tourenBuddySpacings.sm),
                 child: TextButton(
                   onPressed: _validating ? null : _resend,
                   child: const Text('Resend Code'),

@@ -32,7 +32,7 @@ jobs:
         run: |
           mkdir -p config
           echo "SUPABASE_URL=${{ secrets.SUPABASE_URL || 'https://placeholder.supabase.co' }}" > config/supabase.env
-          echo "SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY || 'placeholder' }}" >> config/supabase.envV
+          echo "SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY || 'placeholder' }}" >> config/supabase.env
 
       - name: Analyze Code
         run: flutter analyze

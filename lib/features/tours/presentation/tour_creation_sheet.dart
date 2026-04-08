@@ -68,12 +68,11 @@ class _TourCreationSheetState extends State<TourCreationSheet> {
       top: false,
       child: Padding(
         padding: EdgeInsets.only(
-          left: touringBuddySpacings.lg,
-          right: touringBuddySpacings.lg,
-          top: touringBuddySpacings.lg,
+          left: tourenBuddySpacings.lg,
+          right: tourenBuddySpacings.lg,
+          top: tourenBuddySpacings.lg,
           bottom:
-              MediaQuery.of(context).viewInsets.bottom +
-              touringBuddySpacings.lg,
+              MediaQuery.of(context).viewInsets.bottom + tourenBuddySpacings.lg,
         ),
         child: Form(
           key: _formKey,
@@ -85,7 +84,7 @@ class _TourCreationSheetState extends State<TourCreationSheet> {
                 child: Container(
                   width: 44,
                   height: 4,
-                  margin: EdgeInsets.only(bottom: touringBuddySpacings.sm),
+                  margin: EdgeInsets.only(bottom: tourenBuddySpacings.sm),
                   decoration: BoxDecoration(
                     color: theme.colorScheme.outlineVariant,
                     borderRadius: BorderRadius.circular(999),
@@ -93,15 +92,15 @@ class _TourCreationSheetState extends State<TourCreationSheet> {
                 ),
               ),
               Text('New tour', style: theme.textTheme.titleLarge),
-              SizedBox(height: touringBuddySpacings.xxs),
+              SizedBox(height: tourenBuddySpacings.xxs),
               Text(
                 'Goal: ${widget.goal.latitude.toStringAsFixed(5)}, '
                 '${widget.goal.longitude.toStringAsFixed(5)}',
                 style: theme.textTheme.bodySmall,
               ),
-              SizedBox(height: touringBuddySpacings.md),
+              SizedBox(height: tourenBuddySpacings.md),
               NameFormField(controller: _nameCtrl, labelText: 'Tour Name'),
-              SizedBox(height: touringBuddySpacings.sm),
+              SizedBox(height: tourenBuddySpacings.sm),
               InkWell(
                 onTap: _pickDate,
                 borderRadius: BorderRadius.circular(12),
@@ -118,7 +117,7 @@ class _TourCreationSheetState extends State<TourCreationSheet> {
                         color: theme.colorScheme.primary,
                       ),
                       if (_plannedDate != null) ...[
-                        SizedBox(height: touringBuddySpacings.xs),
+                        SizedBox(height: tourenBuddySpacings.xs),
                         IconButton(
                           tooltip: 'Clear date',
                           onPressed: () => setState(() => _plannedDate = null),
@@ -129,9 +128,9 @@ class _TourCreationSheetState extends State<TourCreationSheet> {
                   ),
                 ),
               ),
-              SizedBox(height: touringBuddySpacings.lg),
+              SizedBox(height: tourenBuddySpacings.lg),
               Text('Touring Partners', style: theme.textTheme.titleMedium),
-              SizedBox(height: touringBuddySpacings.xs),
+              SizedBox(height: tourenBuddySpacings.xs),
               if (contactsService.contacts.isEmpty)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -144,7 +143,7 @@ class _TourCreationSheetState extends State<TourCreationSheet> {
                 )
               else
                 Wrap(
-                  spacing: touringBuddySpacings.xs,
+                  spacing: tourenBuddySpacings.xs,
                   children: contactsService.contacts.map((contact) {
                     final isSelected = _selectedPartnerIds.contains(contact.id);
                     return ContactChip(
@@ -162,9 +161,9 @@ class _TourCreationSheetState extends State<TourCreationSheet> {
                     );
                   }).toList(),
                 ),
-              SizedBox(height: touringBuddySpacings.lg),
+              SizedBox(height: tourenBuddySpacings.lg),
               Row(
-                spacing: touringBuddySpacings.sm,
+                spacing: tourenBuddySpacings.sm,
                 children: [
                   Expanded(
                     child: OutlinedButton(
@@ -172,7 +171,7 @@ class _TourCreationSheetState extends State<TourCreationSheet> {
                       child: const Text('Cancel'),
                     ),
                   ),
-                  SizedBox(height: touringBuddySpacings.sm),
+                  SizedBox(height: tourenBuddySpacings.sm),
                   Expanded(
                     child: FilledButton.icon(
                       onPressed: _submit,

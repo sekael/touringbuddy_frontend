@@ -68,15 +68,15 @@ class _EmailEntryPageState extends State<EmailEntryPage> {
       appBar: AppBar(title: const Text('Sign In')),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(touringBuddySpacings.md),
+          padding: EdgeInsets.all(tourenBuddySpacings.md),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                SizedBox(height: touringBuddySpacings.sm),
+                SizedBox(height: tourenBuddySpacings.sm),
                 const Text('Enter your email and we’ll send you a login code.'),
-                SizedBox(height: touringBuddySpacings.sm),
+                SizedBox(height: tourenBuddySpacings.sm),
                 TextFormField(
                   controller: _emailCtrl,
                   keyboardType: TextInputType.emailAddress,
@@ -96,7 +96,7 @@ class _EmailEntryPageState extends State<EmailEntryPage> {
                   onFieldSubmitted: (_) =>
                       _submitting ? null : _sendLoginCode(),
                 ),
-                SizedBox(height: touringBuddySpacings.md),
+                SizedBox(height: tourenBuddySpacings.md),
                 ElevatedButton(
                   onPressed: _submitting ? null : _sendLoginCode,
                   child: ButtonText(

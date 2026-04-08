@@ -8,7 +8,7 @@ import 'package:touringbuddy_frontend/core/logging/app_logger.dart';
 import 'package:touringbuddy_frontend/features/map/data/map_view_model.dart';
 import 'package:touringbuddy_frontend/features/map/presentation/location_picker.dart';
 import 'package:touringbuddy_frontend/features/map/presentation/map_action_overlay.dart';
-import 'package:touringbuddy_frontend/features/map/presentation/touringbuddy_map.dart';
+import 'package:touringbuddy_frontend/features/map/presentation/touren_buddy_map.dart';
 import 'package:touringbuddy_frontend/main.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -39,7 +39,7 @@ class _MapPageState extends State<MapPage> {
       builder: (context) {
         return Padding(
           padding: EdgeInsets.all(
-            touringBuddySpacings.lg,
+            tourenBuddySpacings.lg,
           ), // Using your theme spacings
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -64,12 +64,12 @@ class _MapPageState extends State<MapPage> {
                   ),
                 ),
               ),
-              SizedBox(height: touringBuddySpacings.md),
+              SizedBox(height: tourenBuddySpacings.md),
               CenterAlignedBodyText(
                 bodyText:
                     "If you don't have a GitHub account, you can always reach out to us at feedback@tourenbuddy.ch",
               ),
-              SizedBox(height: touringBuddySpacings.lg),
+              SizedBox(height: tourenBuddySpacings.lg),
             ],
           ),
         );
@@ -99,7 +99,7 @@ class _MapPageState extends State<MapPage> {
       create: (_) => MapViewModel(),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Touring Buddy'),
+          title: const Text('TourenBuddy'),
           automaticallyImplyLeading: false,
           actions: [
             Padding(
@@ -119,7 +119,7 @@ class _MapPageState extends State<MapPage> {
           ],
         ),
         body: Stack(
-          children: [TouringBuddyMap(), MapActionOverlay(), LocationPicker()],
+          children: [TourenBuddyMap(), MapActionOverlay(), LocationPicker()],
         ),
       ),
     );

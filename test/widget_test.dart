@@ -8,7 +8,7 @@
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('Testing TouringBuddy', (WidgetTester tester) async {
+  testWidgets('Testing TourenBuddy', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     tester.printToConsole('No tests yet');
   });
